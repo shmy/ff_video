@@ -1,26 +1,14 @@
 part of '../tencent_video_control.dart';
 
 class _Footer extends StatefulWidget {
-  final double position;
-  final double duration;
-  final bool isPlaying;
-  final bool isFullscreen;
-  final Animation<double> animation;
-  final ValueChanged<double> onSliderChange;
-  final ValueChanged<bool> onStatusChange;
-  final ValueChanged<bool> onFullscreenModeChange;
+  final VideoControlMixin mixin;
+  final double animation;
 
-  const _Footer(
-      {Key key,
-      this.position,
-      this.duration,
-      this.onSliderChange,
-      this.isPlaying,
-      this.onStatusChange,
-      this.onFullscreenModeChange,
-      this.isFullscreen,
-      this.animation})
-      : super(key: key);
+  const _Footer({
+    Key key,
+    this.mixin,
+    this.animation,
+  }) : super(key: key);
 
   @override
   __FooterState createState() => __FooterState();
@@ -29,11 +17,12 @@ class _Footer extends StatefulWidget {
 class __FooterState extends State<_Footer> {
   final TextStyle style = TextStyle(fontSize: 12, color: Colors.white);
   final double height = 30.0;
+  VideoControlMixin get mixin => widget.mixin;
 
   @override
   Widget build(BuildContext context) {
     return Transform.translate(
-      offset: Offset(0, height - (widget.animation?.value ?? 0) * height),
+      offset: Offset(0, height - (widget.animation ?? 0) * height),
       child: Container(
         height: height,
         padding: EdgeInsets.symmetric(
@@ -55,15 +44,15 @@ class __FooterState extends State<_Footer> {
           children: [
             GestureDetector(
               onTap: () {
-                widget.onStatusChange?.call(!widget.isPlaying);
+                mixin.togglePlay?.call(!mixin.isPlaying);
               },
               child: Icon(
-                widget.isPlaying ? Icons.pause : Icons.play_arrow,
+                mixin.isPlaying ? Icons.pause : Icons.play_arrow,
                 color: Colors.white,
               ),
             ),
             Text(
-              Util.formatTime(widget.position),
+              Util.formatTime(mixin.position),
               style: style,
             ),
             Expanded(
@@ -79,24 +68,24 @@ class __FooterState extends State<_Footer> {
                   overlayShape: RoundSliderOverlayShape(overlayRadius: 6.0),
                 ),
                 child: Slider(
-                  value: widget.position,
-                  max: widget.duration,
+                  value: mixin.position,
+                  max: mixin.duration,
                   onChanged: (double value) {
-                    widget.onSliderChange?.call(value);
+                    mixin.seekTo?.call(value);
                   },
                 ),
               ),
             ),
             Text(
-              Util.formatTime(widget.duration),
+              Util.formatTime(mixin.duration),
               style: style,
             ),
             GestureDetector(
               onTap: () {
-                widget.onFullscreenModeChange?.call(!widget.isFullscreen);
+                mixin.toggleFullscreen?.call(!mixin.isFullscreen);
               },
               child: Icon(
-                !widget.isFullscreen ? Icons.fullscreen : Icons.fullscreen_exit,
+                !mixin.isFullscreen ? Icons.fullscreen : Icons.fullscreen_exit,
                 color: Colors.white,
               ),
             ),

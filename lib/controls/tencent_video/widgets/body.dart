@@ -1,3 +1,4 @@
+import 'package:ff_video/mixins/video_control_mixin.dart';
 import 'package:ff_video/util.dart';
 import 'package:flutter/material.dart';
 
@@ -5,25 +6,13 @@ typedef AsyncValueChanged<T> = Future<void> Function(T value);
 
 class Body extends StatefulWidget {
   final WidgetBuilder builder;
-  final double position;
-  final double duration;
-  final double volume;
-  final double brightness;
-  final AsyncValueChanged<double> onVolumeChange;
-  final AsyncValueChanged<double> onBrightnessChange;
-  final ValueChanged<double> onPositionChange;
+  final VideoControlMixin mixin;
 
-  const Body(
-      {Key key,
-      this.builder,
-      this.volume,
-      this.onVolumeChange,
-      this.brightness,
-      this.onBrightnessChange,
-      this.position,
-      this.duration,
-      this.onPositionChange})
-      : super(key: key);
+  const Body({
+    Key key,
+    this.builder,
+    this.mixin,
+  }) : super(key: key);
 
   @override
   _BodyState createState() => _BodyState();
@@ -37,6 +26,8 @@ class _BodyState extends State<Body> {
   String _popMessage;
 
   Size get size => MediaQuery.of(context).size;
+
+  VideoControlMixin get mixin => widget.mixin;
 
   @override
   Widget build(BuildContext context) {
@@ -77,7 +68,7 @@ class _BodyState extends State<Body> {
     _dy += -details.delta.dy;
     bool isLeft = _startX < size.width / 2;
     double value = double.parse(
-        (_dy / size.height + (isLeft ? widget.brightness : widget.volume))
+        (_dy / size.height + (isLeft ? mixin.brightness : mixin.volume))
             .toStringAsFixed(2));
     if (value >= 1.0) {
       value = 1.0;
@@ -85,11 +76,11 @@ class _BodyState extends State<Body> {
       value = 0.0;
     }
     if (isLeft) {
-      _showPopMessage('亮度: ${_formatPercentage(widget.brightness)}');
-      await widget.onBrightnessChange?.call(value);
+      _showPopMessage('亮度: ${_formatPercentage(mixin.brightness)}');
+      await mixin.setBrightness?.call(value);
     } else {
-      _showPopMessage('音量: ${_formatPercentage(widget.volume)}');
-      await widget.onVolumeChange?.call(value);
+      _showPopMessage('音量: ${_formatPercentage(mixin.volume)}');
+      await mixin.setVolume?.call(value);
     }
   }
 
@@ -102,12 +93,12 @@ class _BodyState extends State<Body> {
 
   void _onHorizontalDragUpdate(DragUpdateDetails details) {
     _dx += details.delta.dx;
-    double position = widget.position + _dx;
+    double position = mixin.position + _dx;
     if (position < 0) {
       position = 0;
     }
-    if (position > widget.duration) {
-      position = widget.duration;
+    if (position > mixin.duration) {
+      position = mixin.duration;
     }
     _newPosition = position;
     _showPopMessage(
@@ -115,7 +106,7 @@ class _BodyState extends State<Body> {
   }
 
   void _onHorizontalDragEnd(DragEndDetails details) {
-    widget.onPositionChange?.call(_newPosition);
+    mixin.seekTo?.call(_newPosition);
     _dx = 0;
     _newPosition = 0;
     setState(() {

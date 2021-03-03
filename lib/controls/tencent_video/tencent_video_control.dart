@@ -13,13 +13,13 @@ typedef SizeTransformCallback = double Function(double);
 
 class TencentVideoControl extends VideoControlWidget {
   final Widget title;
-  final Widget thumbnail;
+  final String thumbnailUrl;
   final SizeTransformCallback sizeTransformCallback;
 
   TencentVideoControl({
     Key key,
     this.title,
-    this.thumbnail,
+    this.thumbnailUrl,
     this.sizeTransformCallback,
   }) : super(key: key);
 
@@ -32,7 +32,11 @@ class _TencentVideoControlState extends State<TencentVideoControl>
   Timer _timer;
   AnimationController _animationController;
   Animation<double> _tweenAnimation;
-  SizeTransformCallback get sizeTransformCallback => widget.sizeTransformCallback ?? (double size) => size;
+  double animationDouble = 0;
+
+  SizeTransformCallback get sizeTransformCallback =>
+      widget.sizeTransformCallback ?? (double size) => size;
+
   @override
   void initState() {
     super.initState();
@@ -51,7 +55,9 @@ class _TencentVideoControlState extends State<TencentVideoControl>
         curve: Curves.fastOutSlowIn,
       ),
     )..addListener(() {
-        setState(() {});
+        setState(() {
+          animationDouble = _tweenAnimation.value;
+        });
       });
   }
 
@@ -78,7 +84,7 @@ class _TencentVideoControlState extends State<TencentVideoControl>
         child: Container(
           color: Colors.transparent,
           child: ClipRRect(
-            child: initialized ? _buildControl() : widget.thumbnail,
+            child: initialized ? _buildControl() : _buildThumbnail(),
           ),
         ),
       ),
@@ -116,34 +122,56 @@ class _TencentVideoControlState extends State<TencentVideoControl>
     return Column(
       children: [
         _Header(
-          animation: _tweenAnimation,
+          animation: animationDouble,
           title: widget.title,
         ),
         Expanded(
           child: Body(
             builder: _buildCenter,
-            position: position,
-            duration: duration,
-            onPositionChange: seekTo,
-            brightness: brightness,
-            onBrightnessChange: setBrightness,
-            volume: volume,
-            onVolumeChange: setVolume,
+            mixin: this,
           ),
         ),
         _wrapListener(
           child: _Footer(
-            position: position,
-            duration: duration,
-            isPlaying: isPlaying,
-            isFullscreen: isFullscreen,
-            animation: _tweenAnimation,
-            onFullscreenModeChange: toggleFullscreen,
-            onSliderChange: seekTo,
-            onStatusChange: togglePlay,
+            mixin: this,
+            animation: animationDouble,
           ),
         ),
       ],
+    );
+  }
+
+  Widget _buildThumbnail() {
+    return Container(
+      decoration: BoxDecoration(
+        image: DecorationImage(
+          image: Image.network(
+            widget.thumbnailUrl,
+            fit: BoxFit.cover,
+          ).image,
+        ),
+      ),
+      child: Center(
+        child: Container(
+          padding: EdgeInsets.all(
+            10,
+          ),
+          decoration: BoxDecoration(
+            color: Color.fromRGBO(0, 0, 0, .7),
+            borderRadius: BorderRadius.all(
+              Radius.circular(5),
+            ),
+          ),
+          child: SizedBox(
+            height: 22,
+            width: 22,
+            child: const CircularProgressIndicator(
+              strokeWidth: 2,
+              valueColor: AlwaysStoppedAnimation(Colors.white),
+            ),
+          ),
+        ),
+      ),
     );
   }
 
