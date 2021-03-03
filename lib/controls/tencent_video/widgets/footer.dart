@@ -25,9 +25,7 @@ class __FooterState extends State<_Footer> {
       offset: Offset(0, height - (widget.animation ?? 0) * height),
       child: Container(
         height: height,
-        padding: EdgeInsets.symmetric(
-          horizontal: 5,
-        ),
+        padding: EdgeInsets.zero,
         decoration: BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.bottomCenter,
