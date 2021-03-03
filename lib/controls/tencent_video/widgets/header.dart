@@ -2,7 +2,7 @@ part of '../tencent_video_control.dart';
 
 class _Header extends StatefulWidget {
   final Widget title;
-  final Animation<double> animation;
+  final double animation;
 
   const _Header({Key key, this.title, this.animation}) : super(key: key);
 
@@ -16,7 +16,7 @@ class __HeaderState extends State<_Header> {
   @override
   Widget build(BuildContext context) {
     return Transform.translate(
-      offset: Offset(0, ((widget.animation?.value ?? 0) - 1) * height),
+      offset: Offset(0, ((widget.animation ?? 0) - 1) * height),
       child: Container(
         height: height,
         padding: EdgeInsets.symmetric(

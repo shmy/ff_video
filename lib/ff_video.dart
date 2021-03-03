@@ -4,29 +4,24 @@ import 'package:flutter/material.dart';
 import 'package:screen/screen.dart';
 import 'package:video_player/video_player.dart';
 
-// class FfVideo {
-//   static const MethodChannel _channel =
-//       const MethodChannel('ff_video');
-//
-//   static Future<String> get platformVersion async {
-//     final String version = await _channel.invokeMethod('getPlatformVersion');
-//     return version;
-//   }
-// }
+export 'package:video_player/video_player.dart';
 class FFVideo extends StatefulWidget {
   final String url;
   final VideoControlWidget control;
   final double aspectRatio;
   final bool autoPlay;
   final bool looping;
+  final ValueChanged<VideoPlayerController> onReceiveController;
 
-  const FFVideo(
-      {Key key,
-      @required this.url,
-      this.control,
-      this.aspectRatio = 16 / 9,
-      this.autoPlay = false, this.looping = false})
-      : super(key: key);
+  const FFVideo({
+    Key key,
+    @required this.url,
+    this.control,
+    this.aspectRatio = 16 / 9,
+    this.autoPlay = false,
+    this.looping = false,
+    this.onReceiveController,
+  }) : super(key: key);
 
   @override
   _FFVideoState createState() => _FFVideoState();
@@ -91,6 +86,7 @@ class _FFVideoState extends State<FFVideo> {
           controller.setLooping(widget.looping);
         }
       });
+    widget.onReceiveController?.call(controller);
     setState(() {
       widget.control.controller.value = controller;
     });
