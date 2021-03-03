@@ -31,7 +31,7 @@ class _Header extends StatelessWidget {
         alignment: Alignment.centerLeft,
         child: Visibility(
           visible: title != null,
-          child: title ?? '',
+          child: title ?? Container(),
         ),
       ),
     );
