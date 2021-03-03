@@ -48,6 +48,12 @@ class _HomePageState extends State<HomePage> {
                 _jumpVideoPage(title: '复仇者联盟4', url: 'https://bili.meijuzuida.com/20190731/21094_0a89b649/index.m3u8');
               },
             ),
+            ListTile(
+              title: Text('短视频'),
+              onTap: () {
+                _jumpVideoPage(title: '短视频', url: 'https://jsmov2.a.yximgs.com/upic/2018/07/07/13/BMjAxODA3MDcxMzUyMzJfMTAwNDY3OTg1MV83MDA5MTU3NDE3XzFfMw==_hd3_B0af5b623763ecda15805d4e524582541.mp4');
+              },
+            ),
           ],
         ),
       ),

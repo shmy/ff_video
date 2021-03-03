@@ -12,6 +12,8 @@ mixin VideoControlMixin<T extends VideoControlWidget> on State<T> {
 
   VideoPlayerValue get value => _value;
 
+  double get aspectRatio => value?.aspectRatio;
+
   bool get isFullscreen => widget.isFullscreen.value;
 
   bool get isLocked => widget.isLocked.value;
@@ -80,15 +82,22 @@ mixin VideoControlMixin<T extends VideoControlWidget> on State<T> {
     setState(() {
       widget.isFullscreen.value = true;
     });
+    List<Future<dynamic>> fs = [];
+    if (aspectRatio > 1) {
+      fs.addAll([
+        // 隐藏状态栏和底部栏
+        SystemChrome.setEnabledSystemUIOverlays([]),
+        // 设置横屏
+        SystemChrome.setPreferredOrientations(
+            [DeviceOrientation.landscapeLeft]),
+      ]);
+    }
     await Future.wait([
-      // 隐藏状态栏和底部栏
-      SystemChrome.setEnabledSystemUIOverlays([]),
-      // 设置横屏
-      SystemChrome.setPreferredOrientations([DeviceOrientation.landscapeLeft]),
+      ...fs,
       Navigator.push(
         context,
-        MaterialPageRoute(
-          builder: (BuildContext context) => Material(
+        _noTransitionRoute(
+          builder: (BuildContext context, child) => Material(
             color: Colors.transparent,
             child: VideoView(
               controller: videoPlayerController,
@@ -100,6 +109,13 @@ mixin VideoControlMixin<T extends VideoControlWidget> on State<T> {
     ]);
   }
 
+  PageRouteBuilder _noTransitionRoute(
+      { TransitionBuilder builder}) {
+    return PageRouteBuilder(pageBuilder: (BuildContext context, animation, secondaryAnimation) {
+      return AnimatedBuilder(animation: animation, builder: builder);
+    });
+  }
+
   Future<void> exitFullscreen() async {
     if (!isFullscreen) {
       return;
@@ -108,13 +124,16 @@ mixin VideoControlMixin<T extends VideoControlWidget> on State<T> {
       widget.isFullscreen.value = false;
     });
     Navigator.pop(context);
-    await Future.wait([
-      // 显示状态栏和底部栏
-      SystemChrome.setEnabledSystemUIOverlays(
-          [SystemUiOverlay.top, SystemUiOverlay.bottom]),
-      // 返回竖屏
-      SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
-    ]);
+    List<Future<dynamic>> fs = [];
+    if (aspectRatio > 1) {
+      await Future.wait([
+        // 显示状态栏和底部栏
+        SystemChrome.setEnabledSystemUIOverlays(
+            [SystemUiOverlay.top, SystemUiOverlay.bottom]),
+        // 返回竖屏
+        SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
+      ]);
+    }
   }
 
   Future<void> toggleFullscreen(bool isFullscreen) async {
@@ -124,6 +143,7 @@ mixin VideoControlMixin<T extends VideoControlWidget> on State<T> {
       exitFullscreen();
     }
   }
+
   void toggleLocked(bool locked) async {
     if (locked) {
       setLocked();
@@ -131,16 +151,19 @@ mixin VideoControlMixin<T extends VideoControlWidget> on State<T> {
       setUnLocked();
     }
   }
+
   void setLocked() {
     setState(() {
       widget.isLocked.value = true;
     });
   }
+
   void setUnLocked() {
     setState(() {
       widget.isLocked.value = false;
     });
   }
+
   Future<void> play() async {
     await videoPlayerController?.play();
   }
