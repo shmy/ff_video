@@ -19,7 +19,10 @@ class Body extends StatefulWidget {
       this.volume,
       this.onVolumeChange,
       this.brightness,
-      this.onBrightnessChange, this.position, this.duration, this.onPositionChange})
+      this.onBrightnessChange,
+      this.position,
+      this.duration,
+      this.onPositionChange})
       : super(key: key);
 
   @override
@@ -40,7 +43,7 @@ class _BodyState extends State<Body> {
     return GestureDetector(
       onVerticalDragStart: _onVerticalDragStart,
       onVerticalDragUpdate: _onVerticalDragUpdate,
-      onVerticalDragEnd:  _onVerticalDragEnd,
+      onVerticalDragEnd: _onVerticalDragEnd,
       onHorizontalDragUpdate: _onHorizontalDragUpdate,
       onHorizontalDragEnd: _onHorizontalDragEnd,
       child: Container(
@@ -107,9 +110,10 @@ class _BodyState extends State<Body> {
       position = widget.duration;
     }
     _newPosition = position;
-    _showPopMessage('${_dx < 0 ? '-' : '+'}${Util.formatTime(_dx)}\n${Util.formatTime(position)}');
-
+    _showPopMessage(
+        '${_dx < 0 ? '-' : '+'}${Util.formatTime(_dx)}\n${Util.formatTime(position)}');
   }
+
   void _onHorizontalDragEnd(DragEndDetails details) {
     widget.onPositionChange?.call(_newPosition);
     _dx = 0;
@@ -118,6 +122,7 @@ class _BodyState extends State<Body> {
       _popMessage = null;
     });
   }
+
   String _formatPercentage(double value) {
     return (value * 100).toInt().toString() + '%';
   }
@@ -129,22 +134,22 @@ class _BodyState extends State<Body> {
   }
 
   Widget _buildPopArea() {
-    if (_popMessage == null) {
-      return Container();
-    }
-    return Center(
-      child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 7, vertical: 3),
-        decoration: BoxDecoration(
-          color: Color.fromRGBO(0, 0, 0, 0.7),
-          borderRadius: BorderRadius.all(
-            Radius.circular(4),
+    return Visibility(
+      visible: _popMessage != null,
+      child: Center(
+        child: Container(
+          padding: EdgeInsets.symmetric(horizontal: 7, vertical: 3),
+          decoration: BoxDecoration(
+            color: Color.fromRGBO(0, 0, 0, 0.7),
+            borderRadius: BorderRadius.all(
+              Radius.circular(4),
+            ),
           ),
-        ),
-        child: Text(
-          _popMessage,
-          style: TextStyle(
-            color: Colors.white,
+          child: Text(
+            _popMessage ?? '',
+            style: TextStyle(
+              color: Colors.white,
+            ),
           ),
         ),
       ),

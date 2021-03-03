@@ -60,11 +60,10 @@ class _VideoViewState extends State<VideoView> {
                 ),
         ),
         Positioned.fill(
-          child: widget.control ??
-              Container(
-                height: 0,
-                width: 0,
-              ),
+          child: Visibility(
+            visible: widget.control != null,
+            child: widget.control,
+          ),
         ),
       ],
     );

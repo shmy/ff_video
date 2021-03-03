@@ -6,32 +6,34 @@ import 'package:screen/screen.dart';
 import 'package:video_player/video_player.dart';
 
 mixin VideoControlMixin<T extends VideoControlWidget> on State<T> {
-  VideoPlayerController get controller => widget.controller.value;
+  VideoPlayerController get videoPlayerController => widget.controller.value;
   double _brightness = 0.0;
+  VideoPlayerValue _value;
+
+  VideoPlayerValue get value => _value;
 
   bool get isFullscreen => widget.isFullscreen.value;
 
-  bool get isBuffering => controller?.value?.isBuffering ?? false;
+  bool get isBuffering => value?.isBuffering ?? false;
 
-  bool get isPlaying => controller?.value?.isPlaying ?? false;
+  bool get isPlaying => value?.isPlaying ?? false;
 
-  bool get hasError => controller?.value?.hasError ?? false;
+  bool get hasError => value?.hasError ?? false;
 
-  bool get initialized => controller?.value?.initialized ?? false;
+  bool get initialized => value?.initialized ?? false;
 
   bool get isEnded => position == duration && duration != 0.0;
 
-  double get playbackSpeed => controller?.value?.playbackSpeed;
+  double get playbackSpeed => value?.playbackSpeed;
 
-  double get volume => controller?.value?.volume;
+  double get volume => value?.volume;
 
   double get brightness => _brightness;
 
-  double get duration =>
-      controller?.value?.duration?.inSeconds?.toDouble() ?? 0;
+  double get duration => value?.duration?.inSeconds?.toDouble() ?? 0;
 
   double get position {
-    double position = controller?.value?.position?.inSeconds?.toDouble() ?? 0;
+    double position = value?.position?.inSeconds?.toDouble() ?? 0;
     if (position >= duration) {
       return duration;
     }
@@ -40,12 +42,15 @@ mixin VideoControlMixin<T extends VideoControlWidget> on State<T> {
 
   void _listener() {
     if (mounted) {
-      setState(() {});
+      setState(() {
+        _value = videoPlayerController.value;
+      });
     }
   }
 
-  Future<void> _init() async {
-    controller?.addListener(_listener);
+  Future<void> _setup() async {
+    videoPlayerController?.removeListener(_listener);
+    videoPlayerController?.addListener(_listener);
     double brightness = await Screen.brightness;
     setState(() {
       _brightness = brightness;
@@ -55,15 +60,14 @@ mixin VideoControlMixin<T extends VideoControlWidget> on State<T> {
   @override
   void initState() {
     super.initState();
-    _init();
+    _setup();
   }
 
   @override
   void didUpdateWidget(VideoControlWidget oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.controller != widget.controller) {
-      oldWidget.controller?.value?.removeListener(_listener);
-      _init();
+      _setup();
     }
   }
 
@@ -85,7 +89,7 @@ mixin VideoControlMixin<T extends VideoControlWidget> on State<T> {
           builder: (BuildContext context) => Material(
             color: Colors.transparent,
             child: VideoView(
-              controller: controller,
+              controller: videoPlayerController,
               control: widget,
             ),
           ),
@@ -120,11 +124,11 @@ mixin VideoControlMixin<T extends VideoControlWidget> on State<T> {
   }
 
   Future<void> play() async {
-    await controller?.play();
+    await videoPlayerController?.play();
   }
 
   Future<void> pause() async {
-    await controller?.pause();
+    await videoPlayerController?.pause();
   }
 
   Future<void> togglePlay(bool isPlay) async {
@@ -136,16 +140,16 @@ mixin VideoControlMixin<T extends VideoControlWidget> on State<T> {
   }
 
   Future<void> setPlaybackSpeed(double speed) async {
-    await controller?.setPlaybackSpeed(speed);
+    await videoPlayerController?.setPlaybackSpeed(speed);
   }
 
   Future<void> seekTo(num seconds) async {
     print('seekTo $seconds');
-    await controller?.seekTo(Duration(seconds: seconds.toInt()));
+    await videoPlayerController?.seekTo(Duration(seconds: seconds.toInt()));
   }
 
   Future<void> setVolume(double volume) async {
-    await controller?.setVolume(volume);
+    await videoPlayerController?.setVolume(volume);
   }
 
   Future<void> setBrightness(double brightness) async {

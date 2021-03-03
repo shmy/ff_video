@@ -4,8 +4,7 @@ class _Header extends StatefulWidget {
   final Widget title;
   final Animation<double> animation;
 
-  const _Header({Key key, this.title, this.animation})
-      : super(key: key);
+  const _Header({Key key, this.title, this.animation}) : super(key: key);
 
   @override
   __HeaderState createState() => __HeaderState();
@@ -33,7 +32,10 @@ class __HeaderState extends State<_Header> {
               ]),
         ),
         alignment: Alignment.centerLeft,
-        child: widget.title ?? Container(),
+        child: Visibility(
+          visible: widget.title != null,
+          child: widget.title,
+        ),
       ),
     );
   }

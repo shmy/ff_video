@@ -9,11 +9,19 @@ part './widgets/header.dart';
 
 part './widgets/footer.dart';
 
+typedef SizeTransformCallback = double Function(double);
+
 class TencentVideoControl extends VideoControlWidget {
   final Widget title;
   final Widget thumbnail;
+  final SizeTransformCallback sizeTransformCallback;
 
-  TencentVideoControl({Key key, this.title, this.thumbnail}) : super(key: key);
+  TencentVideoControl({
+    Key key,
+    this.title,
+    this.thumbnail,
+    this.sizeTransformCallback,
+  }) : super(key: key);
 
   @override
   _TencentVideoControlState createState() => _TencentVideoControlState();
@@ -24,7 +32,7 @@ class _TencentVideoControlState extends State<TencentVideoControl>
   Timer _timer;
   AnimationController _animationController;
   Animation<double> _tweenAnimation;
-
+  SizeTransformCallback get sizeTransformCallback => widget.sizeTransformCallback ?? (double size) => size;
   @override
   void initState() {
     super.initState();
