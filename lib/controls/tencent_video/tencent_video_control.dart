@@ -1,11 +1,12 @@
 import 'dart:async';
-import 'package:ff_video/controls/tencent_video/widgets/body.dart';
 import 'package:ff_video/interfaces/video_control_widget.dart';
 import 'package:ff_video/mixins/video_control_mixin.dart';
 import 'package:ff_video/util.dart';
 import 'package:flutter/material.dart';
 
 part './widgets/header.dart';
+
+part './widgets/body.dart';
 
 part './widgets/footer.dart';
 
@@ -132,15 +133,17 @@ class _TencentVideoControlState extends State<TencentVideoControl>
           child: _Header(
             animation: animationDouble,
             title: widget.title,
+            sizeTransformCallback: sizeTransformCallback,
           ),
         ),
         Expanded(
           child: Stack(
             children: [
               Positioned.fill(
-                child: Body(
+                child: _Body(
                   builder: _buildCenter,
                   mixin: this,
+                  sizeTransformCallback: sizeTransformCallback,
                 ),
               ),
               Positioned(
@@ -152,6 +155,7 @@ class _TencentVideoControlState extends State<TencentVideoControl>
                     child: _LockView(
                       mixin: this,
                       animation: animationDouble,
+                      sizeTransformCallback: sizeTransformCallback,
                     ),
                   ),
                 ),
@@ -165,6 +169,7 @@ class _TencentVideoControlState extends State<TencentVideoControl>
             child: _Footer(
               mixin: this,
               animation: animationDouble,
+              sizeTransformCallback: sizeTransformCallback,
             ),
           ),
         ),
@@ -185,19 +190,19 @@ class _TencentVideoControlState extends State<TencentVideoControl>
       child: Center(
         child: Container(
           padding: EdgeInsets.all(
-            10,
+            sizeTransformCallback(10),
           ),
           decoration: BoxDecoration(
             color: Color.fromRGBO(0, 0, 0, .7),
             borderRadius: BorderRadius.all(
-              Radius.circular(5),
+              Radius.circular(sizeTransformCallback(5)),
             ),
           ),
           child: SizedBox(
-            height: 22,
-            width: 22,
-            child: const CircularProgressIndicator(
-              strokeWidth: 2,
+            height: sizeTransformCallback(22),
+            width: sizeTransformCallback(22),
+            child: CircularProgressIndicator(
+              strokeWidth: sizeTransformCallback(2),
               valueColor: AlwaysStoppedAnimation(Colors.white),
             ),
           ),
@@ -217,7 +222,7 @@ class _TencentVideoControlState extends State<TencentVideoControl>
         child: Icon(
           Icons.error,
           color: Colors.white,
-          size: 40,
+          size: sizeTransformCallback(40),
         ),
       );
     } else if (isEnded) {
@@ -229,7 +234,7 @@ class _TencentVideoControlState extends State<TencentVideoControl>
         child: Icon(
           Icons.replay,
           color: Colors.white,
-          size: 40,
+          size: sizeTransformCallback(40),
         ),
       );
     } else if (!isPlaying) {
@@ -241,15 +246,15 @@ class _TencentVideoControlState extends State<TencentVideoControl>
         child: Icon(
           Icons.play_arrow,
           color: Colors.white,
-          size: 40,
+          size: sizeTransformCallback(40),
         ),
       );
     } else if (isBuffering) {
       result = SizedBox(
-        height: 26,
-        width: 26,
+        height: sizeTransformCallback(26),
+        width: sizeTransformCallback(26),
         child: CircularProgressIndicator(
-          strokeWidth: 2,
+          strokeWidth: sizeTransformCallback(2),
           valueColor: AlwaysStoppedAnimation(Colors.white),
         ),
       );

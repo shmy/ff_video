@@ -1,28 +1,25 @@
 part of '../tencent_video_control.dart';
 
-class _Footer extends StatefulWidget {
+class _Footer extends StatelessWidget {
   final VideoControlMixin mixin;
   final double animation;
+  final SizeTransformCallback sizeTransformCallback;
 
   const _Footer({
     Key key,
     this.mixin,
     this.animation,
+    this.sizeTransformCallback,
   }) : super(key: key);
 
   @override
-  __FooterState createState() => __FooterState();
-}
-
-class __FooterState extends State<_Footer> {
-  final TextStyle style = TextStyle(fontSize: 12, color: Colors.white);
-  final double height = 30.0;
-  VideoControlMixin get mixin => widget.mixin;
-
-  @override
   Widget build(BuildContext context) {
+    final TextStyle style =
+        TextStyle(fontSize: sizeTransformCallback(12), color: Colors.white);
+    final double height = sizeTransformCallback(30);
+
     return Transform.translate(
-      offset: Offset(0, height - (widget.animation ?? 0) * height),
+      offset: Offset(0, height - (animation ?? 0) * height),
       child: Container(
         height: height,
         padding: EdgeInsets.zero,
@@ -47,6 +44,7 @@ class __FooterState extends State<_Footer> {
               child: Icon(
                 mixin.isPlaying ? Icons.pause : Icons.play_arrow,
                 color: Colors.white,
+                size: sizeTransformCallback(22),
               ),
             ),
             Text(
@@ -59,11 +57,13 @@ class __FooterState extends State<_Footer> {
                   activeTrackColor: Colors.white,
                   inactiveTrackColor: Colors.white54,
                   trackShape: RectangularSliderTrackShape(),
-                  trackHeight: 2.0,
+                  trackHeight: sizeTransformCallback(2),
                   thumbColor: Colors.orange,
-                  thumbShape: RoundSliderThumbShape(enabledThumbRadius: 4.0),
+                  thumbShape: RoundSliderThumbShape(
+                      enabledThumbRadius: sizeTransformCallback(4)),
                   overlayColor: Colors.orange,
-                  overlayShape: RoundSliderOverlayShape(overlayRadius: 6.0),
+                  overlayShape: RoundSliderOverlayShape(
+                      overlayRadius: sizeTransformCallback(6)),
                 ),
                 child: Slider(
                   value: mixin.position,
@@ -85,6 +85,7 @@ class __FooterState extends State<_Footer> {
               child: Icon(
                 !mixin.isFullscreen ? Icons.fullscreen : Icons.fullscreen_exit,
                 color: Colors.white,
+                size: sizeTransformCallback(22),
               ),
             ),
           ],
