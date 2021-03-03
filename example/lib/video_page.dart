@@ -37,6 +37,7 @@ class _VideoPageState extends State<VideoPage> {
                   color: Colors.white,
                 ),
               ),
+              sizeTransformCallback: (e) => e,
             ),
           ),
         ],
