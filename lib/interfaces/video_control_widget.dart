@@ -6,6 +6,7 @@ class _ValueWrap<T> {
 
   _ValueWrap({@required this.value});
 }
+
 // fix @immutable
 abstract class VideoControlWidget extends StatefulWidget {
   final _ValueWrap<VideoPlayerController> controller = _ValueWrap(value: null);

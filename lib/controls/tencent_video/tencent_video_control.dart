@@ -70,33 +70,36 @@ class _TencentVideoControlState extends State<TencentVideoControl>
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: _onWillPop,
-      child: GestureDetector(
-        onTap: _toggleMask,
-        onDoubleTap: () {
-          if (isPlaying) {
-            pause();
-          } else {
-            play();
-          }
-        },
-        child: Container(
-          color: Colors.transparent,
-          child: ClipRRect(
-            child: initialized ? _buildControl() : _buildThumbnail(),
-          ),
+    Widget content = GestureDetector(
+      onTap: _toggleMask,
+      onDoubleTap: () {
+        if (isPlaying) {
+          pause();
+        } else {
+          play();
+        }
+      },
+      child: Container(
+        color: Colors.transparent,
+        child: ClipRRect(
+          child: initialized ? _buildControl() : _buildThumbnail(),
         ),
       ),
+    );
+    if (!isFullscreen) {
+      return content;
+    }
+    return WillPopScope(
+      onWillPop: _onWillPop,
+      child: content,
     );
   }
 
   Future<bool> _onWillPop() async {
     if (isFullscreen) {
       await exitFullscreen();
-      return false;
     }
-    return true;
+    return false;
   }
 
   void _toggleMask() {
