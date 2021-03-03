@@ -3,12 +3,16 @@ part of '../tencent_video_control.dart';
 class _LockView extends StatelessWidget {
   final double animation;
   final VideoControlMixin mixin;
-  final double size = 22;
-  const _LockView({Key key, this.animation, this.mixin}) : super(key: key);
+  final SizeTransformCallback sizeTransformCallback;
+
+  const _LockView(
+      {Key key, this.animation, this.mixin, this.sizeTransformCallback})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final dist = size + 5;
+    final size = sizeTransformCallback(22);
+    final dist = size + sizeTransformCallback(5);
     return GestureDetector(
       onTap: () {
         bool newState = !mixin.isLocked;

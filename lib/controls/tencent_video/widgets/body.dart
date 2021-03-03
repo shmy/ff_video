@@ -1,24 +1,23 @@
-import 'package:ff_video/mixins/video_control_mixin.dart';
-import 'package:ff_video/util.dart';
-import 'package:flutter/material.dart';
+part of '../tencent_video_control.dart';
 
 typedef AsyncValueChanged<T> = Future<void> Function(T value);
 
-class Body extends StatefulWidget {
+class _Body extends StatefulWidget {
   final WidgetBuilder builder;
   final VideoControlMixin mixin;
+  final SizeTransformCallback sizeTransformCallback;
 
-  const Body({
+  const _Body({
     Key key,
     this.builder,
-    this.mixin,
+    this.mixin, this.sizeTransformCallback,
   }) : super(key: key);
 
   @override
-  _BodyState createState() => _BodyState();
+  __BodyState createState() => __BodyState();
 }
 
-class _BodyState extends State<Body> {
+class __BodyState extends State<_Body> {
   double _dx = 0;
   double _dy = 0;
   double _startX = 0;
@@ -28,7 +27,8 @@ class _BodyState extends State<Body> {
   Size get size => MediaQuery.of(context).size;
 
   VideoControlMixin get mixin => widget.mixin;
-
+  SizeTransformCallback get sizeTransformCallback =>
+      widget.sizeTransformCallback;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -123,17 +123,18 @@ class _BodyState extends State<Body> {
       visible: _popMessage != null,
       child: Center(
         child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 7, vertical: 3),
+          padding: EdgeInsets.symmetric(horizontal: sizeTransformCallback(7), vertical: sizeTransformCallback(5)),
           decoration: BoxDecoration(
             color: Color.fromRGBO(0, 0, 0, 0.7),
             borderRadius: BorderRadius.all(
-              Radius.circular(4),
+              Radius.circular(sizeTransformCallback(4)),
             ),
           ),
           child: Text(
             _popMessage ?? '',
             style: TextStyle(
               color: Colors.white,
+              fontSize: sizeTransformCallback(15)
             ),
           ),
         ),
