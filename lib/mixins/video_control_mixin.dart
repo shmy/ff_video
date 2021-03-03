@@ -124,7 +124,6 @@ mixin VideoControlMixin<T extends VideoControlWidget> on State<T> {
       widget.isFullscreen.value = false;
     });
     Navigator.pop(context);
-    List<Future<dynamic>> fs = [];
     if (aspectRatio > 1) {
       await Future.wait([
         // 显示状态栏和底部栏
