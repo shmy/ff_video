@@ -39,19 +39,13 @@ class _BodyState extends State<Body> {
       onHorizontalDragEnd: _onHorizontalDragEnd,
       child: Container(
         color: Colors.transparent,
-        child: Row(
+        child: Stack(
           children: [
-            Expanded(
-              child: Stack(
-                children: [
-                  Positioned.fill(
-                    child: widget.builder(context),
-                  ),
-                  Positioned.fill(
-                    child: _buildPopArea(),
-                  ),
-                ],
-              ),
+            Positioned.fill(
+              child: widget.builder(context),
+            ),
+            Positioned.fill(
+              child: _buildPopArea(),
             ),
           ],
         ),

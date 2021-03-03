@@ -14,6 +14,8 @@ mixin VideoControlMixin<T extends VideoControlWidget> on State<T> {
 
   bool get isFullscreen => widget.isFullscreen.value;
 
+  bool get isLocked => widget.isLocked.value;
+
   bool get isBuffering => value?.isBuffering ?? false;
 
   bool get isPlaying => value?.isPlaying ?? false;
@@ -122,7 +124,23 @@ mixin VideoControlMixin<T extends VideoControlWidget> on State<T> {
       exitFullscreen();
     }
   }
-
+  void toggleLocked(bool locked) async {
+    if (locked) {
+      setLocked();
+    } else {
+      setUnLocked();
+    }
+  }
+  void setLocked() {
+    setState(() {
+      widget.isLocked.value = true;
+    });
+  }
+  void setUnLocked() {
+    setState(() {
+      widget.isLocked.value = false;
+    });
+  }
   Future<void> play() async {
     await videoPlayerController?.play();
   }

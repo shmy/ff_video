@@ -9,6 +9,8 @@ part './widgets/header.dart';
 
 part './widgets/footer.dart';
 
+part './widgets/lock_view.dart';
+
 typedef SizeTransformCallback = double Function(double);
 
 class TencentVideoControl extends VideoControlWidget {
@@ -96,7 +98,7 @@ class _TencentVideoControlState extends State<TencentVideoControl>
   }
 
   Future<bool> _onWillPop() async {
-    if (isFullscreen) {
+    if (isFullscreen && !isLocked) {
       await exitFullscreen();
     }
     return false;
@@ -104,7 +106,8 @@ class _TencentVideoControlState extends State<TencentVideoControl>
 
   void _toggleMask() {
     _timer?.cancel();
-    if (_animationController.status == AnimationStatus.dismissed) {
+
+    if (animationDouble == 0) {
       _animationController?.forward();
     } else {
       _animationController?.reverse();
@@ -124,20 +127,45 @@ class _TencentVideoControlState extends State<TencentVideoControl>
   Widget _buildControl() {
     return Column(
       children: [
-        _Header(
-          animation: animationDouble,
-          title: widget.title,
+        Visibility(
+          visible: !isLocked,
+          child: _Header(
+            animation: animationDouble,
+            title: widget.title,
+          ),
         ),
         Expanded(
-          child: Body(
-            builder: _buildCenter,
-            mixin: this,
+          child: Stack(
+            children: [
+              Positioned.fill(
+                child: Body(
+                  builder: _buildCenter,
+                  mixin: this,
+                ),
+              ),
+              Positioned(
+                top: 0,
+                left: 0,
+                bottom: 0,
+                child: Center(
+                  child: _wrapListener(
+                    child: _LockView(
+                      mixin: this,
+                      animation: animationDouble,
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
         _wrapListener(
-          child: _Footer(
-            mixin: this,
-            animation: animationDouble,
+          child: Visibility(
+            visible: !isLocked,
+            child: _Footer(
+              mixin: this,
+              animation: animationDouble,
+            ),
           ),
         ),
       ],

@@ -11,6 +11,7 @@ class _ValueWrap<T> {
 abstract class VideoControlWidget extends StatefulWidget {
   final _ValueWrap<VideoPlayerController> controller = _ValueWrap(value: null);
   final _ValueWrap<bool> isFullscreen = _ValueWrap(value: false);
+  final _ValueWrap<bool> isLocked = _ValueWrap(value: false);
 
   VideoControlWidget({Key key}) : super(key: key);
 }
