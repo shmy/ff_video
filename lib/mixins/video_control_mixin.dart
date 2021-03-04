@@ -96,24 +96,28 @@ mixin VideoControlMixin<T extends VideoControlWidget> on State<T> {
       ...fs,
       Navigator.push(
         context,
-        _noTransitionRoute(
-          builder: (BuildContext context, child) => Material(
-            color: Colors.transparent,
-            child: VideoView(
-              controller: videoPlayerController,
-              control: widget,
+        PageRouteBuilder(
+            pageBuilder: (context, animation1, secondaryAnimation) => Material(
+                  color: Colors.transparent,
+                  child: VideoView(
+                    controller: videoPlayerController,
+                    control: widget,
+                  ),
+                ),
+            transitionDuration: Duration(
+              milliseconds: 100,
             ),
-          ),
-        ),
-      )
+            transitionsBuilder: (BuildContext context,
+                Animation<double> animation,
+                Animation<double> secondaryAnimation,
+                Widget child) {
+              return Transform.scale(
+                scale: animation.value,
+                child: child,
+              );
+            }),
+      ),
     ]);
-  }
-
-  PageRouteBuilder _noTransitionRoute(
-      { TransitionBuilder builder}) {
-    return PageRouteBuilder(pageBuilder: (BuildContext context, animation, secondaryAnimation) {
-      return AnimatedBuilder(animation: animation, builder: builder);
-    });
   }
 
   Future<void> exitFullscreen() async {

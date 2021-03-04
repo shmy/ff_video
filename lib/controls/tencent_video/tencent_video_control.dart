@@ -85,7 +85,7 @@ class _TencentVideoControlState extends State<TencentVideoControl>
       child: Container(
         color: Colors.transparent,
         child: ClipRRect(
-          child: initialized ? _buildControl() : _buildThumbnail(),
+          child: (initialized || isFullscreen) ? _buildControl() : _buildThumbnail(),
         ),
       ),
     );
