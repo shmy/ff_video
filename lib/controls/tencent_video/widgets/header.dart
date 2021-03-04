@@ -2,11 +2,12 @@ part of '../tencent_video_control.dart';
 
 class _Header extends StatelessWidget {
   final Widget title;
+  final Widget action;
   final double animation;
   final SizeTransformCallback sizeTransformCallback;
 
   const _Header(
-      {Key key, this.title, this.animation, this.sizeTransformCallback})
+      {Key key, this.title, this.animation, this.sizeTransformCallback, this.action})
       : super(key: key);
 
   @override
@@ -28,10 +29,19 @@ class _Header extends StatelessWidget {
                 Colors.transparent,
               ]),
         ),
-        alignment: Alignment.centerLeft,
-        child: Visibility(
-          visible: title != null,
-          child: title ?? Container(),
+        child: Row(
+          children: [
+            Expanded(
+              child: Visibility(
+                visible: title != null,
+                child: title ?? Container(),
+              ),
+            ),
+            Visibility(
+              visible: action != null,
+              child: action ?? Container(),
+            ),
+          ],
         ),
       ),
     );

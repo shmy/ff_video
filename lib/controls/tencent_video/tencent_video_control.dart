@@ -16,6 +16,7 @@ typedef SizeTransformCallback = double Function(double);
 
 class TencentVideoControl extends VideoControlWidget {
   final Widget title;
+  final Widget action;
   final String thumbnailUrl;
   final SizeTransformCallback sizeTransformCallback;
 
@@ -24,6 +25,7 @@ class TencentVideoControl extends VideoControlWidget {
     this.title,
     this.thumbnailUrl,
     this.sizeTransformCallback,
+    this.action,
   }) : super(key: key);
 
   @override
@@ -128,12 +130,15 @@ class _TencentVideoControlState extends State<TencentVideoControl>
   Widget _buildControl() {
     return Column(
       children: [
-        Visibility(
-          visible: !isLocked,
-          child: _Header(
-            animation: animationDouble,
-            title: widget.title,
-            sizeTransformCallback: sizeTransformCallback,
+        _wrapListener(
+          child: Visibility(
+            visible: !isLocked,
+            child: _Header(
+              animation: animationDouble,
+              title: widget.title,
+              action: widget.action,
+              sizeTransformCallback: sizeTransformCallback,
+            ),
           ),
         ),
         Expanded(
