@@ -11,13 +11,18 @@ class _Footer extends StatelessWidget {
     this.animation,
     this.sizeTransformCallback,
   }) : super(key: key);
-
+  double get bufferedRatio {
+    if (mixin.buffered.length == 0) {
+      return 0;
+    }
+    int bufferedSeconds = mixin.buffered[0].end.inSeconds;
+    return bufferedSeconds / mixin.duration;
+  }
   @override
   Widget build(BuildContext context) {
     final TextStyle style =
         TextStyle(fontSize: sizeTransformCallback(12), color: Colors.white);
     final double height = sizeTransformCallback(30);
-
     return Transform.translate(
       offset: Offset(0, height - (animation ?? 0) * height),
       child: Container(
@@ -52,25 +57,60 @@ class _Footer extends StatelessWidget {
               style: style,
             ),
             Expanded(
-              child: SliderTheme(
-                data: SliderTheme.of(context).copyWith(
-                  activeTrackColor: Colors.white,
-                  inactiveTrackColor: Colors.white54,
-                  trackShape: RectangularSliderTrackShape(),
-                  trackHeight: sizeTransformCallback(2),
-                  thumbColor: Colors.orange,
-                  thumbShape: RoundSliderThumbShape(
-                      enabledThumbRadius: sizeTransformCallback(4)),
-                  overlayColor: Colors.orange,
-                  overlayShape: RoundSliderOverlayShape(
-                      overlayRadius: sizeTransformCallback(6)),
-                ),
-                child: Slider(
-                  value: mixin.position,
-                  max: mixin.duration,
-                  onChanged: (double value) {
-                    mixin.seekTo?.call(value);
-                  },
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: sizeTransformCallback(7),),
+                child: Stack(
+                  children: [
+                    Positioned.fill(
+                      child: Center(
+                        child: Container(
+                          height: sizeTransformCallback(2),
+                          width: double.infinity,
+                          color: Colors.white30,
+                          // color: Colors.red,
+                        ),
+                      ),
+                    ),
+                    Positioned.fill(
+                      child: Center(
+                        child: Container(
+                          height: sizeTransformCallback(2),
+                          color: Colors.transparent,
+                          width: double.infinity,
+                          child: FractionallySizedBox(
+                            alignment: Alignment.centerLeft,
+                            widthFactor: bufferedRatio,
+                            child: Container(
+                              color: Colors.white60,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Positioned.fill(
+                      child: SliderTheme(
+                        data: SliderTheme.of(context).copyWith(
+                          activeTrackColor: Colors.white,
+                          inactiveTrackColor: Colors.transparent,
+                          trackShape: CustomTrackShape(),
+                          trackHeight: sizeTransformCallback(1),
+                          thumbColor: Colors.orange,
+                          thumbShape: RoundSliderThumbShape(
+                              enabledThumbRadius: sizeTransformCallback(4)),
+                          overlayColor: Colors.orange,
+                          overlayShape: RoundSliderOverlayShape(
+                              overlayRadius: sizeTransformCallback(6)),
+                        ),
+                        child: Slider(
+                          value: mixin.position,
+                          max: mixin.duration,
+                          onChanged: (double value) {
+                            mixin.seekTo?.call(value);
+                          },
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
@@ -92,5 +132,22 @@ class _Footer extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+class CustomTrackShape extends RoundedRectSliderTrackShape {
+  // final double trackHeight;
+  // CustomTrackShape({this.trackHeight});
+  Rect getPreferredRect({
+    @required RenderBox parentBox,
+    Offset offset = Offset.zero,
+    @required SliderThemeData sliderTheme,
+    bool isEnabled = false,
+    bool isDiscrete = false,
+  }) {
+    final double trackHeight = sliderTheme.trackHeight;
+    final double trackLeft = offset.dx;
+    final double trackTop = offset.dy + (parentBox.size.height - trackHeight) / 2;
+    final double trackWidth = parentBox.size.width;
+    return Rect.fromLTWH(trackLeft, trackTop, trackWidth, trackHeight);
   }
 }

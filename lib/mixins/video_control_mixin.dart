@@ -30,6 +30,8 @@ mixin VideoControlMixin<T extends VideoControlWidget> on State<T> {
 
   double get playbackSpeed => value?.playbackSpeed;
 
+  List<DurationRange> get buffered => value?.buffered ?? [];
+
   double get volume => value?.volume;
 
   double get brightness => _brightness;
