@@ -32,11 +32,11 @@ class __BodyState extends State<_Body> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onVerticalDragStart: _onVerticalDragStart,
-      onVerticalDragUpdate: _onVerticalDragUpdate,
-      onVerticalDragEnd: _onVerticalDragEnd,
-      onHorizontalDragUpdate: _onHorizontalDragUpdate,
-      onHorizontalDragEnd: _onHorizontalDragEnd,
+      onVerticalDragStart: !mixin.isLocked ? _onVerticalDragStart : null,
+      onVerticalDragUpdate: !mixin.isLocked ? _onVerticalDragUpdate : null,
+      onVerticalDragEnd: !mixin.isLocked ? _onVerticalDragEnd : null,
+      onHorizontalDragUpdate: !mixin.isLocked ? _onHorizontalDragUpdate : null,
+      onHorizontalDragEnd: !mixin.isLocked ? _onHorizontalDragEnd : null,
       child: Container(
         color: Colors.transparent,
         child: Stack(
