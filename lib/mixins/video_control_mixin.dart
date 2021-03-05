@@ -100,7 +100,7 @@ mixin VideoControlMixin<T extends VideoControlWidget> on State<T> {
         context,
         PageRouteBuilder(
             pageBuilder: (context, animation1, secondaryAnimation) => Material(
-                  color: Colors.transparent,
+                  color: Colors.black,
                   child: VideoView(
                     controller: videoPlayerController,
                     control: widget,
