@@ -70,6 +70,7 @@ class _TencentVideoControlState extends State<TencentVideoControl>
   void dispose() {
     super.dispose();
     _animationController?.dispose();
+    _animationController = null;
   }
 
   @override
