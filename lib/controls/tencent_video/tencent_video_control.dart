@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:ff_video/ff_video.dart';
 import 'package:ff_video/interfaces/video_control_widget.dart';
 import 'package:ff_video/mixins/video_control_mixin.dart';
 import 'package:ff_video/util.dart';
@@ -15,6 +16,7 @@ part './widgets/lock_view.dart';
 typedef SizeTransformCallback = double Function(double);
 
 class TencentVideoControl extends VideoControlWidget {
+  final VideoPlayerController controller;
   final Widget? title;
   final Widget? action;
   final String? thumbnailUrl;
@@ -22,11 +24,12 @@ class TencentVideoControl extends VideoControlWidget {
 
   TencentVideoControl({
     Key? key,
+    required this.controller,
     this.title,
     this.thumbnailUrl,
     this.sizeTransformCallback,
     this.action,
-  }) : super(key: key);
+  }) : super(key: key, controller: controller);
 
   @override
   _TencentVideoControlState createState() => _TencentVideoControlState();
@@ -34,9 +37,9 @@ class TencentVideoControl extends VideoControlWidget {
 
 class _TencentVideoControlState extends State<TencentVideoControl>
     with VideoControlMixin, SingleTickerProviderStateMixin {
-   Timer? _timer;
-  late AnimationController? _animationController;
-  late Animation<double> _tweenAnimation;
+  Timer? _timer;
+  AnimationController? _animationController;
+  Animation<double>? _tweenAnimation;
   double animationDouble = 0;
 
   SizeTransformCallback get sizeTransformCallback =>
@@ -59,9 +62,10 @@ class _TencentVideoControlState extends State<TencentVideoControl>
         parent: _animationController!,
         curve: Curves.fastOutSlowIn,
       ),
-    )..addListener(() {
+    )
+      ..addListener(() {
         setState(() {
-          animationDouble = _tweenAnimation.value;
+          animationDouble = _tweenAnimation!.value;
         });
       });
   }
@@ -87,7 +91,9 @@ class _TencentVideoControlState extends State<TencentVideoControl>
       child: Container(
         color: Colors.transparent,
         child: ClipRRect(
-          child: (initialized || isFullscreen) ? _buildControl() : _buildThumbnail(),
+          child: (initialized || isFullscreen)
+              ? _buildControl()
+              : _buildThumbnail(),
         ),
       ),
     );
@@ -108,7 +114,7 @@ class _TencentVideoControlState extends State<TencentVideoControl>
   }
 
   void _toggleMask() {
-      _timer?.cancel();
+    _timer?.cancel();
     if (animationDouble == 0) {
       _animationController?.forward();
     } else {
@@ -185,10 +191,12 @@ class _TencentVideoControlState extends State<TencentVideoControl>
     return Container(
       decoration: BoxDecoration(
         image: DecorationImage(
-          image: Image.network(
+          image: Image
+              .network(
             widget.thumbnailUrl ?? '',
             fit: BoxFit.cover,
-          ).image,
+          )
+              .image,
         ),
       ),
       child: Center(

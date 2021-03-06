@@ -59,7 +59,7 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
-  void _jumpVideoPage({String title, String url}) {
+  void _jumpVideoPage({required String title, required String url}) {
     Navigator.of(context).push(MaterialPageRoute(builder: (context) => VideoPage(url: url, title: title,)));
   }
 }

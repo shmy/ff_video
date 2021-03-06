@@ -1,5 +1,5 @@
+import 'package:ff_video/ff_video.dart';
 import 'package:flutter/material.dart';
-import 'package:video_player/video_player.dart';
 
 class _ValueWrap<T> {
   T? value;
@@ -9,9 +9,9 @@ class _ValueWrap<T> {
 
 // fix @immutable
 abstract class VideoControlWidget extends StatefulWidget {
-  final _ValueWrap<VideoPlayerController> controller = _ValueWrap(value: null);
+  final VideoPlayerController controller;
   final _ValueWrap<bool> isFullscreen = _ValueWrap(value: false);
   final _ValueWrap<bool> isLocked = _ValueWrap(value: false);
 
-  VideoControlWidget({Key? key}) : super(key: key);
+  VideoControlWidget({Key? key, required this.controller}) : super(key: key);
 }

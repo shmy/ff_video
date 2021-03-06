@@ -6,55 +6,52 @@ import 'package:flutter/services.dart';
 import 'package:video_player/video_player.dart';
 
 mixin VideoControlMixin<T extends VideoControlWidget> on State<T> {
-  VideoPlayerController? get videoPlayerController => widget.controller.value;
+  VideoPlayerController? get videoPlayerController => widget.controller;
   double _brightness = 0.0;
-   VideoPlayerValue? _value;
+  VideoPlayerValue _defaultValue = VideoPlayerValue(
+    duration: Duration(
+      seconds: 1,
+    ),
+  );
 
-  VideoPlayerValue? get value => _value;
+  VideoPlayerValue get value => videoPlayerController?.value ?? _defaultValue;
 
-  double get aspectRatio => value?.aspectRatio ?? 16 / 9;
+  double get aspectRatio => value.aspectRatio;
 
   bool get isFullscreen => widget.isFullscreen.value!;
 
   bool get isLocked => widget.isLocked.value!;
 
-  bool get isBuffering => value?.isBuffering ?? false;
+  bool get isBuffering => value.isBuffering;
 
-  bool get isPlaying => value?.isPlaying ?? false;
+  bool get isPlaying => value.isPlaying;
 
-  bool get hasError => value?.hasError ?? false;
+  bool get hasError => value.hasError;
 
-  bool get initialized {
-    if (value == null || value?.isInitialized == null) {
-      return false;
-    }
-    return value!.isInitialized;
-  }
+  bool get initialized => value.isInitialized;
 
   bool get isEnded => position == duration && duration != 0.0;
 
-  double get playbackSpeed => value?.playbackSpeed ?? 1;
+  double get playbackSpeed => value.playbackSpeed;
 
-  List<DurationRange> get buffered => value?.buffered ?? [];
+  List<DurationRange> get buffered => value.buffered;
 
-  double get volume => value?.volume ?? 1;
+  double get volume => value.volume;
 
   double get brightness => _brightness;
 
-  double get duration => value?.duration.inSeconds.toDouble() ?? 0;
+  double get duration => value.duration.inSeconds.toDouble();
 
   double get position {
-    double position = value?.position.inSeconds.toDouble() ?? 0;
+    double position = value.position.inSeconds.toDouble();
     if (position >= duration) {
       return duration;
     }
     return position;
   }
-
   void _listener() {
     if (mounted) {
       setState(() {
-        _value = videoPlayerController?.value;
       });
     }
   }

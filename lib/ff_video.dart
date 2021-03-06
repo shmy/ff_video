@@ -1,26 +1,20 @@
-import 'package:ff_video/interfaces/video_control_widget.dart';
 import 'package:ff_video/plugins/screen.dart';
 import 'package:ff_video/video_view.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
 export 'package:video_player/video_player.dart';
+
+typedef VideoControlBuilder = Widget Function(VideoPlayerController controller);
+
 class FFVideo extends StatefulWidget {
-  final String url;
-  final VideoControlWidget? control;
-  final double aspectRatio;
-  final bool autoPlay;
-  final bool looping;
-  final ValueChanged<VideoPlayerController>? onReceiveController;
+  final VideoPlayerController? controller;
+  final VideoControlBuilder? controlBuilder;
 
   const FFVideo({
     Key? key,
-    required this.url,
-    this.control,
-    this.aspectRatio = 16 / 9,
-    this.autoPlay = false,
-    this.looping = false,
-    this.onReceiveController,
+    this.controller,
+    this.controlBuilder,
   }) : super(key: key);
 
   @override
@@ -28,20 +22,22 @@ class FFVideo extends StatefulWidget {
 }
 
 class _FFVideoState extends State<FFVideo> {
-   VideoPlayerController? controller;
+  VideoPlayerController? get videoPlayerController => widget.controller;
 
   @override
   Widget build(BuildContext context) {
-    if (controller == null) {
+    if (videoPlayerController == null) {
       return Container();
     }
     return AspectRatio(
-      aspectRatio: widget.aspectRatio,
+      aspectRatio: (videoPlayerController?.value.isInitialized != null && videoPlayerController?.value.isInitialized == true) ? videoPlayerController!.value.aspectRatio : 16 / 9,
       child: Container(
         color: Colors.black,
         child: VideoView(
-          controller: controller,
-          control: widget.control,
+          controller: videoPlayerController,
+          control: widget.controlBuilder != null
+              ? widget.controlBuilder!(videoPlayerController!)
+              : Container(),
         ),
       ),
     );
@@ -51,47 +47,13 @@ class _FFVideoState extends State<FFVideo> {
   void initState() {
     super.initState();
     Screen.keepOn(true);
-    _setUpPlayer();
   }
 
   @override
   void dispose() {
     super.dispose();
+    videoPlayerController?.pause();
+    videoPlayerController?.dispose();
     Screen.keepOn(false);
-    controller?.pause();
-    controller?.dispose();
-    controller = null;
-  }
-
-  @override
-  void didUpdateWidget(FFVideo oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (oldWidget.url != widget.url || oldWidget.control != widget.control) {
-      _setUpPlayer();
-    }
-    if (oldWidget.looping != widget.looping) {
-      controller?.setLooping(widget.looping);
-    }
-  }
-
-  void _setUpPlayer() {
-    if (widget.url == "") {
-      return;
-    }
-    controller?.pause();
-    controller?.dispose();
-    controller = VideoPlayerController.network(widget.url)
-      ..initialize().then((_) {
-        if (widget.autoPlay) {
-          controller?.play();
-        }
-        if (widget.looping) {
-          controller?.setLooping(widget.looping);
-        }
-      });
-    widget.onReceiveController?.call(controller!);
-    setState(() {
-      widget.control?.controller.value = controller!;
-    });
   }
 }
