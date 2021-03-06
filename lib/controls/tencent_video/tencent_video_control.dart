@@ -15,13 +15,13 @@ part './widgets/lock_view.dart';
 typedef SizeTransformCallback = double Function(double);
 
 class TencentVideoControl extends VideoControlWidget {
-  final Widget title;
-  final Widget action;
-  final String thumbnailUrl;
-  final SizeTransformCallback sizeTransformCallback;
+  final Widget? title;
+  final Widget? action;
+  final String? thumbnailUrl;
+  final SizeTransformCallback? sizeTransformCallback;
 
   TencentVideoControl({
-    Key key,
+    Key? key,
     this.title,
     this.thumbnailUrl,
     this.sizeTransformCallback,
@@ -34,9 +34,9 @@ class TencentVideoControl extends VideoControlWidget {
 
 class _TencentVideoControlState extends State<TencentVideoControl>
     with VideoControlMixin, SingleTickerProviderStateMixin {
-  Timer _timer;
-  AnimationController _animationController;
-  Animation<double> _tweenAnimation;
+   Timer? _timer;
+  late AnimationController? _animationController;
+  late Animation<double> _tweenAnimation;
   double animationDouble = 0;
 
   SizeTransformCallback get sizeTransformCallback =>
@@ -56,7 +56,7 @@ class _TencentVideoControlState extends State<TencentVideoControl>
       end: 1.0,
     ).animate(
       CurvedAnimation(
-        parent: _animationController,
+        parent: _animationController!,
         curve: Curves.fastOutSlowIn,
       ),
     )..addListener(() {
@@ -70,7 +70,6 @@ class _TencentVideoControlState extends State<TencentVideoControl>
   void dispose() {
     super.dispose();
     _animationController?.dispose();
-    _animationController = null;
   }
 
   @override
@@ -108,8 +107,7 @@ class _TencentVideoControlState extends State<TencentVideoControl>
   }
 
   void _toggleMask() {
-    _timer?.cancel();
-
+      _timer?.cancel();
     if (animationDouble == 0) {
       _animationController?.forward();
     } else {
@@ -187,7 +185,7 @@ class _TencentVideoControlState extends State<TencentVideoControl>
       decoration: BoxDecoration(
         image: DecorationImage(
           image: Image.network(
-            widget.thumbnailUrl,
+            widget.thumbnailUrl ?? '',
             fit: BoxFit.cover,
           ).image,
         ),
@@ -271,7 +269,7 @@ class _TencentVideoControlState extends State<TencentVideoControl>
     );
   }
 
-  Widget _wrapListener({Widget child}) {
+  Widget _wrapListener({required Widget child}) {
     return Listener(
       onPointerDown: (details) {
         _timer?.cancel();

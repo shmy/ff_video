@@ -31,7 +31,7 @@ class _VideoPageState extends State<VideoPage> {
             },
             control: TencentVideoControl(
               thumbnailUrl:
-                  'http://img.mp.itc.cn/upload/20170326/39eaf2c41cfb46fe98982670af385a64_th.jpeg',
+                  'https://img.mp.itc.cn/upload/20170326/39eaf2c41cfb46fe98982670af385a64_th.jpeg',
               title: Text(
                 widget.title,
                 style: TextStyle(

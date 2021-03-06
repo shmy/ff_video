@@ -1,20 +1,20 @@
 part of '../tencent_video_control.dart';
 
 class _Header extends StatelessWidget {
-  final Widget title;
-  final Widget action;
+  final Widget? title;
+  final Widget? action;
   final double animation;
   final SizeTransformCallback sizeTransformCallback;
 
   const _Header(
-      {Key key, this.title, this.animation, this.sizeTransformCallback, this.action})
+      {Key? key, this.title, required this.animation, required this.sizeTransformCallback, this.action})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final double height = sizeTransformCallback(30);
     return Transform.translate(
-      offset: Offset(0, ((animation ?? 0) - 1) * height),
+      offset: Offset(0, (animation - 1) * height),
       child: Container(
         height: height,
         padding: EdgeInsets.symmetric(

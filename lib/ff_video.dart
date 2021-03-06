@@ -1,21 +1,21 @@
 import 'package:ff_video/interfaces/video_control_widget.dart';
 import 'package:ff_video/video_view.dart';
 import 'package:flutter/material.dart';
-import 'package:screen/screen.dart';
+// import 'package:screen/screen.dart';
 import 'package:video_player/video_player.dart';
 
 export 'package:video_player/video_player.dart';
 class FFVideo extends StatefulWidget {
   final String url;
-  final VideoControlWidget control;
+  final VideoControlWidget? control;
   final double aspectRatio;
   final bool autoPlay;
   final bool looping;
-  final ValueChanged<VideoPlayerController> onReceiveController;
+  final ValueChanged<VideoPlayerController>? onReceiveController;
 
   const FFVideo({
-    Key key,
-    @required this.url,
+    Key? key,
+    required this.url,
     this.control,
     this.aspectRatio = 16 / 9,
     this.autoPlay = false,
@@ -28,10 +28,13 @@ class FFVideo extends StatefulWidget {
 }
 
 class _FFVideoState extends State<FFVideo> {
-  VideoPlayerController controller;
+   VideoPlayerController? controller;
 
   @override
   Widget build(BuildContext context) {
+    if (controller == null) {
+      return Container();
+    }
     return AspectRatio(
       aspectRatio: widget.aspectRatio,
       child: Container(
@@ -47,17 +50,17 @@ class _FFVideoState extends State<FFVideo> {
   @override
   void initState() {
     super.initState();
-    Screen.keepOn(true);
+    // Screen.keepOn(true);
     _setUpPlayer();
   }
 
   @override
   void dispose() {
     super.dispose();
-    Screen.keepOn(false);
+    // Screen.keepOn(false);
     controller?.pause();
     controller?.dispose();
-    controller = null;
+    // controller = null;
   }
 
   @override
@@ -80,15 +83,15 @@ class _FFVideoState extends State<FFVideo> {
     controller = VideoPlayerController.network(widget.url)
       ..initialize().then((_) {
         if (widget.autoPlay) {
-          controller.play();
+          controller?.play();
         }
         if (widget.looping) {
-          controller.setLooping(widget.looping);
+          controller?.setLooping(widget.looping);
         }
       });
-    widget.onReceiveController?.call(controller);
+    widget.onReceiveController?.call(controller!);
     setState(() {
-      widget.control.controller.value = controller;
+      widget.control?.controller.value = controller!;
     });
   }
 }

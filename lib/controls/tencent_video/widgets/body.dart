@@ -8,9 +8,9 @@ class _Body extends StatefulWidget {
   final SizeTransformCallback sizeTransformCallback;
 
   const _Body({
-    Key key,
-    this.builder,
-    this.mixin, this.sizeTransformCallback,
+    Key? key,
+    required this.builder,
+    required this.mixin, required this.sizeTransformCallback,
   }) : super(key: key);
 
   @override
@@ -22,7 +22,7 @@ class __BodyState extends State<_Body> {
   double _dy = 0;
   double _startX = 0;
   double _newPosition = 0;
-  String _popMessage;
+   String? _popMessage;
 
   Size get size => MediaQuery.of(context).size;
 
@@ -71,10 +71,10 @@ class __BodyState extends State<_Body> {
     }
     if (isLeft) {
       _showPopMessage('亮度: ${_formatPercentage(mixin.brightness)}');
-      await mixin.setBrightness?.call(value);
+      await mixin.setBrightness.call(value);
     } else {
       _showPopMessage('音量: ${_formatPercentage(mixin.volume)}');
-      await mixin.setVolume?.call(value);
+      await mixin.setVolume.call(value);
     }
   }
 
@@ -100,7 +100,7 @@ class __BodyState extends State<_Body> {
   }
 
   void _onHorizontalDragEnd(DragEndDetails details) {
-    mixin.seekTo?.call(_newPosition);
+    mixin.seekTo.call(_newPosition);
     _dx = 0;
     _newPosition = 0;
     setState(() {

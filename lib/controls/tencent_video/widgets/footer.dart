@@ -6,11 +6,12 @@ class _Footer extends StatelessWidget {
   final SizeTransformCallback sizeTransformCallback;
 
   const _Footer({
-    Key key,
-    this.mixin,
-    this.animation,
-    this.sizeTransformCallback,
+    Key? key,
+    required this.mixin,
+    required this.animation,
+    required this.sizeTransformCallback,
   }) : super(key: key);
+
   double get bufferedRatio {
     if (mixin.buffered.length == 0) {
       return 0;
@@ -18,13 +19,14 @@ class _Footer extends StatelessWidget {
     int bufferedSeconds = mixin.buffered[0].end.inSeconds;
     return bufferedSeconds / mixin.duration;
   }
+
   @override
   Widget build(BuildContext context) {
     final TextStyle style =
         TextStyle(fontSize: sizeTransformCallback(12), color: Colors.white);
     final double height = sizeTransformCallback(30);
     return Transform.translate(
-      offset: Offset(0, height - (animation ?? 0) * height),
+      offset: Offset(0, height - animation * height),
       child: Container(
         height: height,
         padding: EdgeInsets.zero,
@@ -44,7 +46,7 @@ class _Footer extends StatelessWidget {
           children: [
             GestureDetector(
               onTap: () {
-                mixin.togglePlay?.call(!mixin.isPlaying);
+                mixin.togglePlay.call(!mixin.isPlaying);
               },
               child: Icon(
                 mixin.isPlaying ? Icons.pause : Icons.play_arrow,
@@ -58,7 +60,9 @@ class _Footer extends StatelessWidget {
             ),
             Expanded(
               child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: sizeTransformCallback(7),),
+                padding: EdgeInsets.symmetric(
+                  horizontal: sizeTransformCallback(7),
+                ),
                 child: Stack(
                   children: [
                     Positioned.fill(
@@ -105,7 +109,7 @@ class _Footer extends StatelessWidget {
                           value: mixin.position,
                           max: mixin.duration,
                           onChanged: (double value) {
-                            mixin.seekTo?.call(value);
+                            mixin.seekTo.call(value);
                           },
                         ),
                       ),
@@ -120,7 +124,7 @@ class _Footer extends StatelessWidget {
             ),
             GestureDetector(
               onTap: () {
-                mixin.toggleFullscreen?.call(!mixin.isFullscreen);
+                mixin.toggleFullscreen.call(!mixin.isFullscreen);
               },
               child: Icon(
                 !mixin.isFullscreen ? Icons.fullscreen : Icons.fullscreen_exit,
@@ -134,19 +138,21 @@ class _Footer extends StatelessWidget {
     );
   }
 }
+
 class CustomTrackShape extends RoundedRectSliderTrackShape {
   // final double trackHeight;
   // CustomTrackShape({this.trackHeight});
   Rect getPreferredRect({
-    @required RenderBox parentBox,
+    required RenderBox parentBox,
     Offset offset = Offset.zero,
-    @required SliderThemeData sliderTheme,
+    required SliderThemeData sliderTheme,
     bool isEnabled = false,
     bool isDiscrete = false,
   }) {
-    final double trackHeight = sliderTheme.trackHeight;
+    final double trackHeight = sliderTheme.trackHeight ?? 0;
     final double trackLeft = offset.dx;
-    final double trackTop = offset.dy + (parentBox.size.height - trackHeight) / 2;
+    final double trackTop =
+        offset.dy + (parentBox.size.height - trackHeight) / 2;
     final double trackWidth = parentBox.size.width;
     return Rect.fromLTWH(trackLeft, trackTop, trackWidth, trackHeight);
   }

@@ -1,5 +1,5 @@
 # ff_video
-> 基于 `video_player: 1.0.1` https://pub.dev/packages/video_player;
+> 基于 `video_player: 2.0.0` https://pub.dev/packages/video_player;
 > 支持Ios/Android;
 > 提供一系列的控制层编写辅助方法；
 > 提供多个常见app控制层的实现；

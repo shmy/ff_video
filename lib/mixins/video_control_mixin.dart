@@ -2,21 +2,21 @@ import 'package:ff_video/interfaces/video_control_widget.dart';
 import 'package:ff_video/video_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:screen/screen.dart';
+// import 'package:screen/screen.dart';
 import 'package:video_player/video_player.dart';
 
 mixin VideoControlMixin<T extends VideoControlWidget> on State<T> {
-  VideoPlayerController get videoPlayerController => widget.controller.value;
+  VideoPlayerController? get videoPlayerController => widget.controller.value;
   double _brightness = 0.0;
-  VideoPlayerValue _value;
+   VideoPlayerValue? _value;
 
-  VideoPlayerValue get value => _value;
+  VideoPlayerValue? get value => _value;
 
-  double get aspectRatio => value?.aspectRatio;
+  double get aspectRatio => value?.aspectRatio ?? 16 / 9;
 
-  bool get isFullscreen => widget.isFullscreen.value;
+  bool get isFullscreen => widget.isFullscreen.value!;
 
-  bool get isLocked => widget.isLocked.value;
+  bool get isLocked => widget.isLocked.value!;
 
   bool get isBuffering => value?.isBuffering ?? false;
 
@@ -24,22 +24,27 @@ mixin VideoControlMixin<T extends VideoControlWidget> on State<T> {
 
   bool get hasError => value?.hasError ?? false;
 
-  bool get initialized => value?.initialized ?? false;
+  bool get initialized {
+    if (value == null || value?.isInitialized == null) {
+      return false;
+    }
+    return value!.isInitialized;
+  }
 
   bool get isEnded => position == duration && duration != 0.0;
 
-  double get playbackSpeed => value?.playbackSpeed;
+  double get playbackSpeed => value?.playbackSpeed ?? 1;
 
   List<DurationRange> get buffered => value?.buffered ?? [];
 
-  double get volume => value?.volume;
+  double get volume => value?.volume ?? 1;
 
   double get brightness => _brightness;
 
-  double get duration => value?.duration?.inSeconds?.toDouble() ?? 0;
+  double get duration => value?.duration.inSeconds.toDouble() ?? 0;
 
   double get position {
-    double position = value?.position?.inSeconds?.toDouble() ?? 0;
+    double position = value?.position.inSeconds.toDouble() ?? 0;
     if (position >= duration) {
       return duration;
     }
@@ -49,7 +54,7 @@ mixin VideoControlMixin<T extends VideoControlWidget> on State<T> {
   void _listener() {
     if (mounted) {
       setState(() {
-        _value = videoPlayerController.value;
+        _value = videoPlayerController?.value;
       });
     }
   }
@@ -57,7 +62,7 @@ mixin VideoControlMixin<T extends VideoControlWidget> on State<T> {
   Future<void> _setup() async {
     videoPlayerController?.removeListener(_listener);
     videoPlayerController?.addListener(_listener);
-    double brightness = await Screen.brightness;
+    double brightness = 1;
     setState(() {
       _brightness = brightness;
     });
@@ -70,7 +75,7 @@ mixin VideoControlMixin<T extends VideoControlWidget> on State<T> {
   }
 
   @override
-  void didUpdateWidget(VideoControlWidget oldWidget) {
+  void didUpdateWidget(T oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.controller != widget.controller) {
       _setup();
@@ -202,6 +207,6 @@ mixin VideoControlMixin<T extends VideoControlWidget> on State<T> {
     setState(() {
       _brightness = brightness;
     });
-    await Screen.setBrightness(brightness);
+    // await Screen.setBrightness(brightness);
   }
 }

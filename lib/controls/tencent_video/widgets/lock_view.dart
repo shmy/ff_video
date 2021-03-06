@@ -6,7 +6,7 @@ class _LockView extends StatelessWidget {
   final SizeTransformCallback sizeTransformCallback;
 
   const _LockView(
-      {Key key, this.animation, this.mixin, this.sizeTransformCallback})
+      {Key? key, required this.animation, required this.mixin, required this.sizeTransformCallback})
       : super(key: key);
 
   @override
@@ -19,7 +19,7 @@ class _LockView extends StatelessWidget {
         mixin.toggleLocked(newState);
       },
       child: Transform.translate(
-        offset: Offset((animation ?? 0) * dist - size, 0),
+        offset: Offset(animation * dist - size, 0),
         child: Icon(
           mixin.isLocked ? Icons.lock : Icons.lock_open,
           color: Colors.white,
