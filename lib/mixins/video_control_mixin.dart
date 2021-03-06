@@ -1,8 +1,8 @@
 import 'package:ff_video/interfaces/video_control_widget.dart';
+import 'package:ff_video/plugins/screen.dart';
 import 'package:ff_video/video_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-// import 'package:screen/screen.dart';
 import 'package:video_player/video_player.dart';
 
 mixin VideoControlMixin<T extends VideoControlWidget> on State<T> {
@@ -207,6 +207,6 @@ mixin VideoControlMixin<T extends VideoControlWidget> on State<T> {
     setState(() {
       _brightness = brightness;
     });
-    // await Screen.setBrightness(brightness);
+    await Screen.setBrightness(brightness);
   }
 }

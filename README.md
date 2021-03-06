@@ -26,3 +26,4 @@
 [x] 滑动调整进度
 [x] 支持竖屏视频
 [x] buffered 展示
+[x] 自己实现screen 插件不支持ios

@@ -1,7 +1,7 @@
 import 'package:ff_video/interfaces/video_control_widget.dart';
+import 'package:ff_video/plugins/screen.dart';
 import 'package:ff_video/video_view.dart';
 import 'package:flutter/material.dart';
-// import 'package:screen/screen.dart';
 import 'package:video_player/video_player.dart';
 
 export 'package:video_player/video_player.dart';
@@ -50,17 +50,17 @@ class _FFVideoState extends State<FFVideo> {
   @override
   void initState() {
     super.initState();
-    // Screen.keepOn(true);
+    Screen.keepOn(true);
     _setUpPlayer();
   }
 
   @override
   void dispose() {
     super.dispose();
-    // Screen.keepOn(false);
+    Screen.keepOn(false);
     controller?.pause();
     controller?.dispose();
-    // controller = null;
+    controller = null;
   }
 
   @override
