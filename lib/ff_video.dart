@@ -10,11 +10,12 @@ typedef VideoControlBuilder = Widget Function(VideoPlayerController controller);
 class FFVideo extends StatefulWidget {
   final VideoPlayerController? controller;
   final VideoControlBuilder? controlBuilder;
+  final double aspectRatio;
 
   const FFVideo({
     Key? key,
     this.controller,
-    this.controlBuilder,
+    this.controlBuilder, this.aspectRatio = 16 / 9,
   }) : super(key: key);
 
   @override
@@ -30,7 +31,7 @@ class _FFVideoState extends State<FFVideo> {
       return Container();
     }
     return AspectRatio(
-      aspectRatio: (videoPlayerController?.value.isInitialized != null && videoPlayerController?.value.isInitialized == true) ? videoPlayerController!.value.aspectRatio : 16 / 9,
+      aspectRatio: widget.aspectRatio,
       child: Container(
         color: Colors.black,
         child: VideoView(
