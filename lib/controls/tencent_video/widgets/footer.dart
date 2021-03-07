@@ -122,14 +122,15 @@ class _Footer extends StatelessWidget {
               Util.formatTime(mixin.duration),
               style: style,
             ),
-            GestureDetector(
-              onTap: () {
-                mixin.toggleFullscreen.call(!mixin.isFullscreen);
-              },
-              child: Icon(
-                !mixin.isFullscreen ? Icons.fullscreen : Icons.fullscreen_exit,
-                color: Colors.white,
-                size: sizeTransformCallback(22),
+            Visibility(
+              visible: !mixin.isFullscreen && !mixin.isLocked,
+              child: GestureDetector(
+                onTap: mixin.enterFullscreen,
+                child: Icon(
+                  !mixin.isFullscreen ? Icons.fullscreen : Icons.fullscreen_exit,
+                  color: Colors.white,
+                  size: sizeTransformCallback(22),
+                ),
               ),
             ),
           ],

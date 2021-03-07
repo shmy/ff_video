@@ -73,6 +73,7 @@ class _TencentVideoControlState extends State<TencentVideoControl>
   @override
   void dispose() {
     super.dispose();
+    _animationController?.stop();
     _animationController?.dispose();
     _animationController = null;
   }
@@ -141,6 +142,7 @@ class _TencentVideoControlState extends State<TencentVideoControl>
             child: _Header(
               animation: animationDouble,
               title: widget.title,
+              mixin: this,
               action: widget.action,
               sizeTransformCallback: sizeTransformCallback,
             ),

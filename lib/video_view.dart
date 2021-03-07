@@ -15,11 +15,21 @@ class _VideoViewState extends State<VideoView> {
   @override
   void initState() {
     super.initState();
-    widget.controller?.addListener(() {
+    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+      widget.controller?.addListener(_listener);
+    });
+  }
+  @override
+  void dispose() {
+    super.dispose();
+    widget.controller?.removeListener(_listener);
+  }
+  void _listener() {
+    if (mounted) {
       setState(() {
         _aspectRatio = widget.controller!.value.aspectRatio;
       });
-    });
+    }
   }
   @override
   Widget build(BuildContext context) {

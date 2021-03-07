@@ -18,9 +18,9 @@ mixin VideoControlMixin<T extends VideoControlWidget> on State<T> {
 
   double get aspectRatio => value.aspectRatio;
 
-  bool get isFullscreen => widget.isFullscreen.value!;
+  bool get isFullscreen => widget.isFullscreen;
 
-  bool get isLocked => widget.isLocked.value!;
+  bool get isLocked => widget.isLocked;
 
   bool get isBuffering => value.isBuffering;
 
@@ -59,7 +59,7 @@ mixin VideoControlMixin<T extends VideoControlWidget> on State<T> {
   Future<void> _setup() async {
     videoPlayerController?.removeListener(_listener);
     videoPlayerController?.addListener(_listener);
-    double brightness = 1;
+    double brightness = await Screen.brightness;
     setState(() {
       _brightness = brightness;
     });
@@ -70,7 +70,11 @@ mixin VideoControlMixin<T extends VideoControlWidget> on State<T> {
     super.initState();
     _setup();
   }
-
+  @override
+  void dispose() {
+    super.dispose();
+    videoPlayerController?.removeListener(_listener);
+  }
   @override
   void didUpdateWidget(T oldWidget) {
     super.didUpdateWidget(oldWidget);
@@ -83,8 +87,9 @@ mixin VideoControlMixin<T extends VideoControlWidget> on State<T> {
     if (isFullscreen) {
       return;
     }
+
     setState(() {
-      widget.isFullscreen.value = true;
+      widget.isFullscreen = true;
     });
     List<Future<dynamic>> fs = [];
     if (aspectRatio > 1) {
@@ -97,30 +102,37 @@ mixin VideoControlMixin<T extends VideoControlWidget> on State<T> {
       ]);
     }
     await Future.wait([
-      ...fs,
       Navigator.push(
         context,
-        PageRouteBuilder(
-            pageBuilder: (context, animation1, secondaryAnimation) => Material(
-                  color: Colors.black,
-                  child: VideoView(
-                    controller: videoPlayerController,
-                    control: widget,
-                  ),
-                ),
-            transitionDuration: Duration(
-              milliseconds: 100,
-            ),
-            transitionsBuilder: (BuildContext context,
-                Animation<double> animation,
-                Animation<double> secondaryAnimation,
-                Widget child) {
-              return Transform.scale(
-                scale: animation.value,
-                child: child,
-              );
-            }),
+        MaterialPageRoute(builder: (context) => Material(
+          color: Colors.black,
+          child: VideoView(
+            controller: videoPlayerController,
+            control: widget,
+          ),
+        ),),
+        // PageRouteBuilder(
+        //     pageBuilder: (context, animation1, secondaryAnimation) => Material(
+        //           color: Colors.black,
+        //           child: VideoView(
+        //             controller: videoPlayerController,
+        //             control: widget,
+        //           ),
+        //         ),
+        //     transitionDuration: Duration(
+        //       milliseconds: 100,
+        //     ),
+        //     transitionsBuilder: (BuildContext context,
+        //         Animation<double> animation,
+        //         Animation<double> secondaryAnimation,
+        //         Widget child) {
+        //       return Transform.scale(
+        //         scale: animation.value,
+        //         child: child,
+        //       );
+        //     }),
       ),
+      ...fs,
     ]);
   }
 
@@ -129,7 +141,7 @@ mixin VideoControlMixin<T extends VideoControlWidget> on State<T> {
       return;
     }
     setState(() {
-      widget.isFullscreen.value = false;
+      widget.isFullscreen = false;
     });
     Navigator.pop(context);
     if (aspectRatio > 1) {
@@ -161,13 +173,13 @@ mixin VideoControlMixin<T extends VideoControlWidget> on State<T> {
 
   void setLocked() {
     setState(() {
-      widget.isLocked.value = true;
+      widget.isLocked = true;
     });
   }
 
   void setUnLocked() {
     setState(() {
-      widget.isLocked.value = false;
+      widget.isLocked = false;
     });
   }
 

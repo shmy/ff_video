@@ -3,11 +3,17 @@ part of '../tencent_video_control.dart';
 class _Header extends StatelessWidget {
   final Widget? title;
   final Widget? action;
+  final VideoControlMixin mixin;
   final double animation;
   final SizeTransformCallback sizeTransformCallback;
 
   const _Header(
-      {Key? key, this.title, required this.animation, required this.sizeTransformCallback, this.action})
+      {Key? key,
+      this.title,
+      required this.animation,
+      required this.sizeTransformCallback,
+      this.action,
+      required this.mixin})
       : super(key: key);
 
   @override
@@ -31,6 +37,19 @@ class _Header extends StatelessWidget {
         ),
         child: Row(
           children: [
+            Visibility(
+              visible: mixin.isFullscreen && !mixin.isLocked,
+              child: GestureDetector(
+                onTap: mixin.exitFullscreen,
+                child: Icon(
+                  Icons.arrow_back_ios_outlined,
+                  color: Colors.white,
+                  size: sizeTransformCallback(
+                    22,
+                  ),
+                ),
+              ),
+            ),
             Expanded(
               child: Visibility(
                 visible: title != null,
