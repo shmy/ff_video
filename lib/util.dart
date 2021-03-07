@@ -1,4 +1,4 @@
-class Util {
+class FFVideoUtil {
   static String formatTime(double sec) {
     Duration d = Duration(seconds: sec.abs().toInt());
     final ms = d.inMilliseconds;

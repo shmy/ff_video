@@ -55,7 +55,7 @@ class _Footer extends StatelessWidget {
               ),
             ),
             Text(
-              Util.formatTime(mixin.position),
+              FFVideoUtil.formatTime(mixin.position),
               style: style,
             ),
             Expanded(
@@ -119,7 +119,7 @@ class _Footer extends StatelessWidget {
               ),
             ),
             Text(
-              Util.formatTime(mixin.duration),
+              FFVideoUtil.formatTime(mixin.duration),
               style: style,
             ),
             Visibility(

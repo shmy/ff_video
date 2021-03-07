@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
 export 'package:video_player/video_player.dart';
+export 'package:ff_video/util.dart';
 
 typedef VideoControlBuilder = Widget Function(VideoPlayerController controller);
 

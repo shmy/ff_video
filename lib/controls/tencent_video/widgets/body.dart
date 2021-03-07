@@ -96,7 +96,7 @@ class __BodyState extends State<_Body> {
     }
     _newPosition = position;
     _showPopMessage(
-        '${_dx < 0 ? '-' : '+'}${Util.formatTime(_dx)}\n${Util.formatTime(position)}');
+        '${_dx < 0 ? '-' : '+'}${FFVideoUtil.formatTime(_dx)}\n${FFVideoUtil.formatTime(position)}');
   }
 
   void _onHorizontalDragEnd(DragEndDetails details) {
