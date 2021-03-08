@@ -37,16 +37,19 @@ class _Header extends StatelessWidget {
         ),
         child: Row(
           children: [
-            Visibility(
-              visible: mixin.isFullscreen && !mixin.isLocked,
-              child: GestureDetector(
-                onTap: mixin.exitFullscreen,
-                child: Icon(
-                  Icons.arrow_back_ios_outlined,
-                  color: Colors.white,
-                  size: sizeTransformCallback(
-                    22,
-                  ),
+            GestureDetector(
+              onTap: () {
+                if (mixin.isFullscreen) {
+                  mixin.exitFullscreen();
+                } else {
+                  Navigator.of(context).pop();
+                }
+              },
+              child: Icon(
+                Icons.arrow_back_ios_outlined,
+                color: Colors.white,
+                size: sizeTransformCallback(
+                  22,
                 ),
               ),
             ),
