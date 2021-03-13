@@ -47,15 +47,13 @@ class _FFVideoState extends State<FFVideo> {
 
   @override
   void initState() {
-    super.initState();
     Screen.keepOn(true);
+    super.initState();
   }
 
   @override
   void dispose() {
-    super.dispose();
-    videoPlayerController?.pause();
-    videoPlayerController?.dispose();
     Screen.keepOn(false);
+    super.dispose();
   }
 }
