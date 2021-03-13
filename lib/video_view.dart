@@ -11,6 +11,32 @@ class VideoView extends StatefulWidget {
 }
 
 class _VideoViewState extends State<VideoView> {
+  double _aspectRatio = 16 / 9;
+  @override
+  void initState() {
+    super.initState();
+      widget.controller?.addListener(_listener);
+  }
+  @override
+  void dispose() {
+    super.dispose();
+    widget.controller?.removeListener(_listener);
+  }
+  @override
+  void didUpdateWidget(covariant VideoView oldWidget) {
+    if (oldWidget.controller != widget.controller) {
+      widget.controller?.removeListener(_listener);
+      widget.controller?.addListener(_listener);
+    }
+    super.didUpdateWidget(oldWidget);
+  }
+  void _listener() {
+    if (mounted) {
+      setState(() {
+        _aspectRatio = widget.controller!.value.aspectRatio;
+      });
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -19,7 +45,7 @@ class _VideoViewState extends State<VideoView> {
           child: widget.controller != null
               ? Center(
                   child: AspectRatio(
-                    aspectRatio: widget.controller!.value.aspectRatio,
+                    aspectRatio: _aspectRatio,
                     child: VideoPlayer(widget.controller!),
                   ),
                 )
