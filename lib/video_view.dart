@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
+
 class VideoView extends StatefulWidget {
   final VideoPlayerController? controller;
   final Widget? control;
@@ -12,16 +13,19 @@ class VideoView extends StatefulWidget {
 
 class _VideoViewState extends State<VideoView> {
   double _aspectRatio = 16 / 9;
+
   @override
   void initState() {
     super.initState();
-      widget.controller?.addListener(_listener);
+    widget.controller?.addListener(_listener);
   }
+
   @override
   void dispose() {
     super.dispose();
     widget.controller?.removeListener(_listener);
   }
+
   @override
   void didUpdateWidget(covariant VideoView oldWidget) {
     if (oldWidget.controller != widget.controller) {
@@ -30,6 +34,7 @@ class _VideoViewState extends State<VideoView> {
     }
     super.didUpdateWidget(oldWidget);
   }
+
   void _listener() {
     if (mounted) {
       setState(() {
@@ -37,6 +42,7 @@ class _VideoViewState extends State<VideoView> {
       });
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return Stack(
