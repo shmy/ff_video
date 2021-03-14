@@ -23,20 +23,21 @@ class _Footer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final TextStyle style =
-        TextStyle(fontSize: sizeTransformCallback(12), color: Colors.white);
-    final double height = sizeTransformCallback(30);
+        TextStyle(fontSize: sizeTransformCallback(14), color: Colors.white);
+    final double height = sizeTransformCallback(32);
+    final double iconSize = sizeTransformCallback(28);
     return Transform.translate(
       offset: Offset(0, height - animation * height),
       child: Container(
         height: height,
-        padding: EdgeInsets.zero,
+        padding: EdgeInsets.symmetric(horizontal: sizeTransformCallback(5),),
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            begin: Alignment.bottomCenter,
-            end: Alignment.topCenter,
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
             colors: [
-              Colors.white24,
               Colors.transparent,
+              Colors.white24,
             ],
           ),
         ),
@@ -51,7 +52,7 @@ class _Footer extends StatelessWidget {
               child: Icon(
                 mixin.isPlaying ? Icons.pause : Icons.play_arrow,
                 color: Colors.white,
-                size: sizeTransformCallback(22),
+                size: iconSize,
               ),
             ),
             Text(
@@ -97,13 +98,16 @@ class _Footer extends StatelessWidget {
                           activeTrackColor: Colors.white,
                           inactiveTrackColor: Colors.transparent,
                           trackShape: CustomTrackShape(),
-                          trackHeight: sizeTransformCallback(1),
+                          trackHeight: sizeTransformCallback(1.2),
                           thumbColor: Colors.orange,
                           thumbShape: RoundSliderThumbShape(
-                              enabledThumbRadius: sizeTransformCallback(4)),
+                            enabledThumbRadius: sizeTransformCallback(5),
+                            elevation: 0,
+                            pressedElevation: 0,
+                          ),
                           overlayColor: Colors.orange,
                           overlayShape: RoundSliderOverlayShape(
-                              overlayRadius: sizeTransformCallback(6)),
+                              overlayRadius: sizeTransformCallback(5)),
                         ),
                         child: Slider(
                           value: mixin.position,
@@ -127,9 +131,11 @@ class _Footer extends StatelessWidget {
               child: GestureDetector(
                 onTap: mixin.enterFullscreen,
                 child: Icon(
-                  !mixin.isFullscreen ? Icons.fullscreen : Icons.fullscreen_exit,
+                  !mixin.isFullscreen
+                      ? Icons.fullscreen
+                      : Icons.fullscreen_exit,
                   color: Colors.white,
-                  size: sizeTransformCallback(22),
+                  size: iconSize,
                 ),
               ),
             ),

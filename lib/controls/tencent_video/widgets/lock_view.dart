@@ -11,7 +11,7 @@ class _LockView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final size = sizeTransformCallback(22);
+    final size = sizeTransformCallback(28);
     final dist = size + sizeTransformCallback(5);
     return GestureDetector(
       onTap: () {

@@ -29,7 +29,7 @@ class _VideoViewState extends State<VideoView> {
   @override
   void didUpdateWidget(covariant VideoView oldWidget) {
     if (oldWidget.controller != widget.controller) {
-      widget.controller?.removeListener(_listener);
+      oldWidget.controller?.removeListener(_listener);
       widget.controller?.addListener(_listener);
     }
     super.didUpdateWidget(oldWidget);
@@ -45,27 +45,29 @@ class _VideoViewState extends State<VideoView> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Positioned.fill(
-          child: widget.controller != null
-              ? Center(
-                  child: AspectRatio(
-                    aspectRatio: _aspectRatio,
-                    child: VideoPlayer(widget.controller!),
+    return SafeArea(
+      child: Stack(
+        children: [
+          Positioned.fill(
+            child: widget.controller != null
+                ? Center(
+                    child: AspectRatio(
+                      aspectRatio: _aspectRatio,
+                      child: VideoPlayer(widget.controller!),
+                    ),
+                  )
+                : Container(
+                    color: Colors.black,
                   ),
-                )
-              : Container(
-                  color: Colors.black,
-                ),
-        ),
-        Positioned.fill(
-          child: Visibility(
-            visible: widget.control != null,
-            child: widget.control ?? Container(),
           ),
-        ),
-      ],
+          Positioned.fill(
+            child: Visibility(
+              visible: widget.control != null,
+              child: widget.control ?? Container(),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

@@ -49,10 +49,10 @@ mixin VideoControlMixin<T extends VideoControlWidget> on State<T> {
     }
     return position;
   }
+
   void _listener() {
     if (mounted) {
-      setState(() {
-      });
+      setState(() {});
     }
   }
 
@@ -70,11 +70,13 @@ mixin VideoControlMixin<T extends VideoControlWidget> on State<T> {
     super.initState();
     _setup();
   }
+
   @override
   void dispose() {
     super.dispose();
     videoPlayerController?.removeListener(_listener);
   }
+
   @override
   void didUpdateWidget(T oldWidget) {
     super.didUpdateWidget(oldWidget);
@@ -104,13 +106,15 @@ mixin VideoControlMixin<T extends VideoControlWidget> on State<T> {
     await Future.wait([
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => Material(
-          color: Colors.black,
-          child: VideoView(
-            controller: videoPlayerController,
-            control: widget,
+        MaterialPageRoute(
+          builder: (context) => Material(
+            color: Colors.black,
+            child: VideoView(
+              controller: videoPlayerController,
+              control: widget,
+            ),
           ),
-        ),),
+        ),
         // PageRouteBuilder(
         //     pageBuilder: (context, animation1, secondaryAnimation) => Material(
         //           color: Colors.black,
@@ -135,7 +139,6 @@ mixin VideoControlMixin<T extends VideoControlWidget> on State<T> {
       ...fs,
     ]);
   }
-
   Future<void> exitFullscreen() async {
     if (!isFullscreen) {
       return;

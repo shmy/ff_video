@@ -19,6 +19,7 @@ class _Header extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final double height = sizeTransformCallback(30);
+    final double iconSize = sizeTransformCallback(28);
     return Transform.translate(
       offset: Offset(0, (animation - 1) * height),
       child: Container(
@@ -28,11 +29,11 @@ class _Header extends StatelessWidget {
         ),
         decoration: BoxDecoration(
           gradient: new LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
+              begin: Alignment.bottomCenter,
+              end: Alignment.topCenter,
               colors: [
-                Colors.white24,
                 Colors.transparent,
+                Colors.white24,
               ]),
         ),
         child: Row(
@@ -48,9 +49,7 @@ class _Header extends StatelessWidget {
               child: Icon(
                 Icons.arrow_back_ios_outlined,
                 color: Colors.white,
-                size: sizeTransformCallback(
-                  22,
-                ),
+                size: iconSize,
               ),
             ),
             Expanded(
