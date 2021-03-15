@@ -208,8 +208,8 @@ class PlaySpeedWidget extends StatelessWidget {
   Widget _buildPlaySpeed() {
     return Container(
       height: double.infinity,
-      width: 100,
-      color: Color.fromRGBO(0, 0, 0, 0.7),
+      width: sizeTransformCallback(80),
+      color: Color.fromRGBO(0, 0, 0, 0.3),
       padding: EdgeInsets.zero,
       child: ListView(
         children: [
@@ -244,10 +244,13 @@ class PlaySpeedWidget extends StatelessWidget {
                 width: sizeTransformCallback(1),
                 color: isSelected ? Colors.deepOrange : Colors.transparent)),
         child: Center(
-            child: Text(
-          speed.toString(),
-          style: style,
-        )),
+          child: Text(
+            '${speed}x',
+            style: style.copyWith(
+              color: isSelected ? Colors.deepOrange : style.color,
+            ),
+          ),
+        ),
       ),
     );
   }
