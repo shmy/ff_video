@@ -30,7 +30,9 @@ class _Footer extends StatelessWidget {
       offset: Offset(0, height - animation * height),
       child: Container(
         height: height,
-        padding: EdgeInsets.symmetric(horizontal: sizeTransformCallback(5),),
+        padding: EdgeInsets.symmetric(
+          horizontal: sizeTransformCallback(5),
+        ),
         decoration: BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topCenter,
@@ -126,6 +128,27 @@ class _Footer extends StatelessWidget {
               FFVideoUtil.formatTime(mixin.duration),
               style: style,
             ),
+            GestureDetector(
+              onTap: () {
+                mixin.showPopover(
+                  (BuildContext context) => PlaySpeedWidget(
+                    playbackSpeed: mixin.playbackSpeed,
+                    onChange: (v) => mixin.setPlaybackSpeed(v),
+                    sizeTransformCallback: sizeTransformCallback,
+                  ),
+                );
+              },
+              child: Container(
+                padding:
+                    EdgeInsets.symmetric(horizontal: sizeTransformCallback(5)),
+                child: Text(
+                  '${mixin.playbackSpeed}x',
+                  style: style.copyWith(
+                    fontSize: sizeTransformCallback(16),
+                  ),
+                ),
+              ),
+            ),
             Visibility(
               visible: !mixin.isFullscreen && !mixin.isLocked,
               child: GestureDetector(
@@ -162,5 +185,70 @@ class CustomTrackShape extends RoundedRectSliderTrackShape {
         offset.dy + (parentBox.size.height - trackHeight) / 2;
     final double trackWidth = parentBox.size.width;
     return Rect.fromLTWH(trackLeft, trackTop, trackWidth, trackHeight);
+  }
+}
+
+class PlaySpeedWidget extends StatelessWidget {
+  final double playbackSpeed;
+  final ValueChanged<double> onChange;
+  final SizeTransformCallback sizeTransformCallback;
+
+  const PlaySpeedWidget(
+      {Key? key,
+      required this.playbackSpeed,
+      required this.onChange,
+      required this.sizeTransformCallback})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return _buildPlaySpeed();
+  }
+
+  Widget _buildPlaySpeed() {
+    return Container(
+      height: double.infinity,
+      width: 100,
+      color: Color.fromRGBO(0, 0, 0, 0.7),
+      padding: EdgeInsets.zero,
+      child: ListView(
+        children: [
+          _buildPlaySpeedItem(0.5),
+          _buildPlaySpeedItem(0.75),
+          _buildPlaySpeedItem(1),
+          _buildPlaySpeedItem(1.25),
+          _buildPlaySpeedItem(1.5),
+          _buildPlaySpeedItem(2.0),
+          _buildPlaySpeedItem(3.0),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildPlaySpeedItem(double speed) {
+    final isSelected = speed.toDouble() == playbackSpeed;
+    final TextStyle style = TextStyle(
+      fontSize: sizeTransformCallback(16),
+      color: Colors.white,
+    );
+    return GestureDetector(
+      onTap: () {
+        onChange(speed);
+      },
+      child: Container(
+        height: sizeTransformCallback(48),
+        width: double.infinity,
+        decoration: BoxDecoration(
+            color: Colors.transparent,
+            border: Border.all(
+                width: sizeTransformCallback(1),
+                color: isSelected ? Colors.deepOrange : Colors.transparent)),
+        child: Center(
+            child: Text(
+          speed.toString(),
+          style: style,
+        )),
+      ),
+    );
   }
 }

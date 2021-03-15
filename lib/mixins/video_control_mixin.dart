@@ -115,26 +115,6 @@ mixin VideoControlMixin<T extends VideoControlWidget> on State<T> {
             ),
           ),
         ),
-        // PageRouteBuilder(
-        //     pageBuilder: (context, animation1, secondaryAnimation) => Material(
-        //           color: Colors.black,
-        //           child: VideoView(
-        //             controller: videoPlayerController,
-        //             control: widget,
-        //           ),
-        //         ),
-        //     transitionDuration: Duration(
-        //       milliseconds: 100,
-        //     ),
-        //     transitionsBuilder: (BuildContext context,
-        //         Animation<double> animation,
-        //         Animation<double> secondaryAnimation,
-        //         Widget child) {
-        //       return Transform.scale(
-        //         scale: animation.value,
-        //         child: child,
-        //       );
-        //     }),
       ),
       ...fs,
     ]);
@@ -221,4 +201,5 @@ mixin VideoControlMixin<T extends VideoControlWidget> on State<T> {
     });
     await Screen.setBrightness(brightness);
   }
+  void showPopover(WidgetBuilder builder) {}
 }

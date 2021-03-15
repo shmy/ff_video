@@ -44,6 +44,7 @@ class _TencentVideoControlState extends State<TencentVideoControl>
 
   SizeTransformCallback get sizeTransformCallback =>
       widget.sizeTransformCallback ?? (double size) => size;
+  WidgetBuilder? _popoverWidgetBuilder;
 
   @override
   void initState() {
@@ -62,8 +63,7 @@ class _TencentVideoControlState extends State<TencentVideoControl>
         parent: _animationController!,
         curve: Curves.fastOutSlowIn,
       ),
-    )
-      ..addListener(() {
+    )..addListener(() {
         setState(() {
           animationDouble = _tweenAnimation!.value;
         });
@@ -92,9 +92,26 @@ class _TencentVideoControlState extends State<TencentVideoControl>
       child: Container(
         color: Colors.transparent,
         child: ClipRRect(
-          child: (initialized || isFullscreen)
-              ? _buildControl()
-              : _buildThumbnail(),
+          child: Stack(
+            children: [
+              Positioned.fill(
+                child: (initialized || isFullscreen)
+                    ? _buildControl()
+                    : _buildThumbnail(),
+              ),
+              _popoverWidgetBuilder != null
+                  ? Positioned.fill(
+                      child: Container(
+                        color: Colors.transparent,
+                        child: Align(
+                          alignment: Alignment.centerRight,
+                          child: _popoverWidgetBuilder!(context),
+                        ),
+                      ),
+                    )
+                  : Container()
+            ],
+          ),
         ),
       ),
     );
@@ -116,6 +133,11 @@ class _TencentVideoControlState extends State<TencentVideoControl>
 
   void _toggleMask() {
     _timer?.cancel();
+    if (_popoverWidgetBuilder != null) {
+      setState(() {
+        _popoverWidgetBuilder = null;
+      });
+    }
     if (animationDouble == 0) {
       _animationController?.forward();
     } else {
@@ -193,12 +215,10 @@ class _TencentVideoControlState extends State<TencentVideoControl>
     return Container(
       decoration: BoxDecoration(
         image: DecorationImage(
-          image: Image
-              .network(
+          image: Image.network(
             widget.thumbnailUrl ?? '',
             fit: BoxFit.cover,
-          )
-              .image,
+          ).image,
         ),
       ),
       child: Center(
@@ -293,5 +313,13 @@ class _TencentVideoControlState extends State<TencentVideoControl>
       },
       child: child,
     );
+  }
+
+  @override
+  void showPopover(WidgetBuilder builder) {
+    setState(() {
+      _popoverWidgetBuilder = builder;
+    });
+    _animationController?.reverse();
   }
 }
