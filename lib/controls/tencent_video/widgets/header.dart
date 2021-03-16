@@ -1,18 +1,18 @@
 part of '../tencent_video_control.dart';
 
 class _Header extends StatelessWidget {
-  final Widget? title;
-  final Widget? action;
+  final MixinBuilder? titleBuilder;
+  final MixinBuilder? actionBuilder;
   final VideoControlMixin mixin;
   final double animation;
   final SizeTransformCallback sizeTransformCallback;
 
   const _Header(
       {Key? key,
-      this.title,
+      this.titleBuilder,
       required this.animation,
       required this.sizeTransformCallback,
-      this.action,
+      this.actionBuilder,
       required this.mixin})
       : super(key: key);
 
@@ -54,13 +54,13 @@ class _Header extends StatelessWidget {
             ),
             Expanded(
               child: Visibility(
-                visible: title != null,
-                child: title ?? Container(),
+                visible: titleBuilder != null,
+                child: titleBuilder != null ? titleBuilder!(context, mixin) : Container(),
               ),
             ),
             Visibility(
-              visible: action != null,
-              child: action ?? Container(),
+              visible: actionBuilder != null,
+              child: actionBuilder != null ? actionBuilder!(context, mixin) : Container(),
             ),
           ],
         ),

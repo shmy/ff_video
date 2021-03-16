@@ -40,15 +40,14 @@ class _VideoPageState extends State<VideoPage> {
             controller: controller,
             controlBuilder: (videoPlayController) => TencentVideoControl(
               controller: videoPlayController,
-              thumbnailUrl:
-                  'https://img.mp.itc.cn/upload/20170326/39eaf2c41cfb46fe98982670af385a64_th.jpeg',
-              title: Text(
+              thumbnailBuilder: (context, mixin) => Image.network('https://img.mp.itc.cn/upload/20170326/39eaf2c41cfb46fe98982670af385a64_th.jpeg'),
+              titleBuilder: (context, mixin) => Text(
                 widget.title,
                 style: TextStyle(
                   color: Colors.white,
                 ),
               ),
-              action: GestureDetector(
+              actionBuilder: (context, mixin) => GestureDetector(
                 onTap: () {
                   print('add taped');
                 },

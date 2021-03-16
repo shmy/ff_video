@@ -14,21 +14,21 @@ part './widgets/footer.dart';
 part './widgets/lock_view.dart';
 
 typedef SizeTransformCallback = double Function(double);
-
+typedef MixinBuilder = Widget Function(BuildContext context, VideoControlMixin mixin);
 class TencentVideoControl extends VideoControlWidget {
   final VideoPlayerController controller;
-  final Widget? title;
-  final Widget? action;
-  final String? thumbnailUrl;
+  final MixinBuilder? titleBuilder;
+  final MixinBuilder? actionBuilder;
+  final MixinBuilder? thumbnailBuilder;
   final SizeTransformCallback? sizeTransformCallback;
 
   TencentVideoControl({
     Key? key,
     required this.controller,
-    this.title,
-    this.thumbnailUrl,
+    this.titleBuilder,
+    this.thumbnailBuilder,
     this.sizeTransformCallback,
-    this.action,
+    this.actionBuilder,
   }) : super(key: key, controller: controller);
 
   @override
@@ -163,9 +163,9 @@ class _TencentVideoControlState extends State<TencentVideoControl>
             visible: !isLocked,
             child: _Header(
               animation: animationDouble,
-              title: widget.title,
+              titleBuilder: widget.titleBuilder,
               mixin: this,
-              action: widget.action,
+              actionBuilder: widget.actionBuilder,
               sizeTransformCallback: sizeTransformCallback,
             ),
           ),
@@ -212,37 +212,47 @@ class _TencentVideoControlState extends State<TencentVideoControl>
   }
 
   Widget _buildThumbnail() {
-    return Container(
-      decoration: BoxDecoration(
-        image: DecorationImage(
-          image: Image.network(
-            widget.thumbnailUrl ?? '',
-            fit: BoxFit.cover,
-          ).image,
+    List<Widget> list = [
+    Positioned.fill(child:Center(
+      child: Container(
+        padding: EdgeInsets.all(
+          sizeTransformCallback(10),
         ),
-      ),
-      child: Center(
-        child: Container(
-          padding: EdgeInsets.all(
-            sizeTransformCallback(10),
+        decoration: BoxDecoration(
+          color: Color.fromRGBO(0, 0, 0, .7),
+          borderRadius: BorderRadius.all(
+            Radius.circular(sizeTransformCallback(5)),
           ),
-          decoration: BoxDecoration(
-            color: Color.fromRGBO(0, 0, 0, .7),
-            borderRadius: BorderRadius.all(
-              Radius.circular(sizeTransformCallback(5)),
-            ),
-          ),
-          child: SizedBox(
-            height: sizeTransformCallback(22),
-            width: sizeTransformCallback(22),
-            child: CircularProgressIndicator(
-              strokeWidth: sizeTransformCallback(2),
-              valueColor: AlwaysStoppedAnimation(Colors.white),
-            ),
+        ),
+        child: SizedBox(
+          height: sizeTransformCallback(22),
+          width: sizeTransformCallback(22),
+          child: CircularProgressIndicator(
+            strokeWidth: sizeTransformCallback(2),
+            valueColor: AlwaysStoppedAnimation(Colors.white),
           ),
         ),
       ),
+    ),
+    )
+    ];
+    if (widget.thumbnailBuilder != null) {
+      list.insert(0, Positioned.fill(child: widget.thumbnailBuilder!(context, this)));
+    }
+    return Stack(
+      children: list,
     );
+    // return Container(
+    //   decoration: BoxDecoration(
+    //     image: DecorationImage(
+    //       image: Image.network(
+    //         widget.thumbnailBuilder ?? '',
+    //         fit: BoxFit.cover,
+    //       ).image,
+    //     ),
+    //   ),
+    //   child: ,
+    // );
   }
 
   Widget _buildCenter(BuildContext context) {
