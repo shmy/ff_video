@@ -8,13 +8,13 @@ import 'package:video_player/video_player.dart';
 mixin VideoControlMixin<T extends VideoControlWidget> on State<T> {
   VideoPlayerController? get videoPlayerController => widget.controller;
   double _brightness = 0.0;
-  VideoPlayerValue _defaultValue = VideoPlayerValue(
+  VideoPlayerValue _value = VideoPlayerValue(
     duration: Duration(
       seconds: 1,
     ),
   );
 
-  VideoPlayerValue get value => videoPlayerController?.value ?? _defaultValue;
+  VideoPlayerValue get value => _value;
 
   double get aspectRatio => value.aspectRatio;
 
@@ -27,6 +27,8 @@ mixin VideoControlMixin<T extends VideoControlWidget> on State<T> {
   bool get isPlaying => value.isPlaying;
 
   bool get hasError => value.hasError;
+
+  String? get errorDescription => value.errorDescription;
 
   bool get initialized => value.isInitialized;
 
@@ -52,7 +54,9 @@ mixin VideoControlMixin<T extends VideoControlWidget> on State<T> {
 
   void _listener() {
     if (mounted) {
-      setState(() {});
+      setState(() {
+        _value = widget.controller.value;
+      });
     }
   }
 
@@ -187,7 +191,6 @@ mixin VideoControlMixin<T extends VideoControlWidget> on State<T> {
   }
 
   Future<void> seekTo(num seconds) async {
-    print('seekTo $seconds');
     await videoPlayerController?.seekTo(Duration(seconds: seconds.toInt()));
   }
 

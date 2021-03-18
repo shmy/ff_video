@@ -39,7 +39,7 @@ class _HomePageState extends State<HomePage> {
             ListTile(
               title: Text('白雪公主和小矮人'),
               onTap: () {
-                _jumpVideoPage(title: '白雪公主和小矮人', url: 'https://hair.jingpin88.com/20171029/Fillu3JT/index.m3u8');
+                _jumpVideoPage(title: '白雪公主和小矮人', url: 'https://hair.jingpin88.com/20171029/Fillu3JT/index1.m3u8');
               },
             ),
             ListTile(

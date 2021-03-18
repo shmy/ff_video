@@ -224,7 +224,7 @@ class _TencentVideoControlState extends State<TencentVideoControl>
             Radius.circular(sizeTransformCallback(5)),
           ),
         ),
-        child: SizedBox(
+        child: hasError ? _buildErrorWidget() : SizedBox(
           height: sizeTransformCallback(22),
           width: sizeTransformCallback(22),
           child: CircularProgressIndicator(
@@ -242,33 +242,32 @@ class _TencentVideoControlState extends State<TencentVideoControl>
     return Stack(
       children: list,
     );
-    // return Container(
-    //   decoration: BoxDecoration(
-    //     image: DecorationImage(
-    //       image: Image.network(
-    //         widget.thumbnailBuilder ?? '',
-    //         fit: BoxFit.cover,
-    //       ).image,
-    //     ),
-    //   ),
-    //   child: ,
-    // );
   }
-
+  Widget _buildErrorWidget() {
+    return Container(
+      color: Colors.transparent,
+      height: sizeTransformCallback(65),
+      child: Column(
+        children: [
+          Expanded(
+            child: Icon(
+              Icons.error_outline_outlined,
+              color: Colors.white,
+              size: sizeTransformCallback(40),
+            ),
+          ),
+          Text('播放出错, 请稍后再试', style: TextStyle(
+            color: Colors.white,
+            fontSize: sizeTransformCallback(14),
+          ),)
+        ],
+      ),
+    );
+  }
   Widget _buildCenter(BuildContext context) {
     Widget result = Container();
     if (hasError) {
-      result = GestureDetector(
-        onTap: () {
-          seekTo(0);
-          play();
-        },
-        child: Icon(
-          Icons.error,
-          color: Colors.white,
-          size: sizeTransformCallback(40),
-        ),
-      );
+      result = _buildErrorWidget();
     } else if (isEnded) {
       result = GestureDetector(
         onTap: () {
