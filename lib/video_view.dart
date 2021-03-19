@@ -39,6 +39,7 @@ class _VideoViewState extends State<VideoView> {
     if (mounted) {
       setState(() {
         _aspectRatio = widget.controller!.value.aspectRatio;
+        print(_aspectRatio);
       });
     }
   }

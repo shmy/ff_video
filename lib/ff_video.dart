@@ -16,7 +16,7 @@ class FFVideo extends StatefulWidget {
   const FFVideo({
     Key? key,
     this.controller,
-    this.controlBuilder, this.aspectRatio = 16 / 9,
+    this.controlBuilder, this.aspectRatio = 5 / 3,
   }) : super(key: key);
 
   @override
