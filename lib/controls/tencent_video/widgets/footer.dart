@@ -25,7 +25,7 @@ class _Footer extends StatelessWidget {
     final TextStyle style =
         TextStyle(fontSize: sizeTransformCallback(14), color: Colors.white);
     final double height = sizeTransformCallback(32);
-    final double iconSize = sizeTransformCallback(28);
+    final double iconSize = sizeTransformCallback(22);
     return Transform.translate(
       offset: Offset(0, height - animation * height),
       child: Container(
@@ -51,11 +51,13 @@ class _Footer extends StatelessWidget {
               onTap: () {
                 mixin.togglePlay.call(!mixin.isPlaying);
               },
-              child: Icon(
-                mixin.isPlaying ? Icons.pause : Icons.play_arrow,
+              child: _withPadding(Icon(
+                mixin.isPlaying
+                    ? IconFonts.iconZanting_huaban
+                    : IconFonts.iconBofang,
                 color: Colors.white,
                 size: iconSize,
-              ),
+              )),
             ),
             Text(
               FFVideoUtil.formatTime(mixin.position),
@@ -100,7 +102,7 @@ class _Footer extends StatelessWidget {
                           activeTrackColor: Colors.white,
                           inactiveTrackColor: Colors.transparent,
                           trackShape: CustomTrackShape(),
-                          trackHeight: sizeTransformCallback(1.2),
+                          trackHeight: sizeTransformCallback(2),
                           thumbColor: Colors.orange,
                           thumbShape: RoundSliderThumbShape(
                             enabledThumbRadius: sizeTransformCallback(5),
@@ -138,10 +140,7 @@ class _Footer extends StatelessWidget {
                   ),
                 );
               },
-              child: Container(
-                padding:
-                    EdgeInsets.symmetric(horizontal: sizeTransformCallback(5)),
-                child: Text(
+              child: _withPadding(Text(
                   '${mixin.playbackSpeed}x',
                   style: style.copyWith(
                     fontSize: sizeTransformCallback(16),
@@ -151,20 +150,27 @@ class _Footer extends StatelessWidget {
             ),
             Visibility(
               visible: !mixin.isFullscreen && !mixin.isLocked,
-              child: GestureDetector(
+              child: _withPadding(GestureDetector(
                 onTap: mixin.enterFullscreen,
                 child: Icon(
-                  !mixin.isFullscreen
-                      ? Icons.fullscreen
-                      : Icons.fullscreen_exit,
+                  IconFonts.iconQuanping1,
                   color: Colors.white,
                   size: iconSize,
-                ),
+                )),
               ),
             ),
           ],
         ),
       ),
+    );
+  }
+
+  Widget _withPadding(Widget child) {
+    return Padding(
+      padding: EdgeInsets.symmetric(
+        horizontal: sizeTransformCallback(5),
+      ),
+      child: child,
     );
   }
 }

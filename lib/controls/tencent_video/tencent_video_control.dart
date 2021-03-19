@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:ff_video/ff_video.dart';
+import 'package:ff_video/font.dart';
 import 'package:ff_video/interfaces/video_control_widget.dart';
 import 'package:ff_video/mixins/video_control_mixin.dart';
 import 'package:ff_video/util.dart';
@@ -251,7 +252,7 @@ class _TencentVideoControlState extends State<TencentVideoControl>
         children: [
           Expanded(
             child: Icon(
-              Icons.error_outline_outlined,
+              IconFonts.iconError,
               color: Colors.white,
               size: sizeTransformCallback(40),
             ),
@@ -275,7 +276,7 @@ class _TencentVideoControlState extends State<TencentVideoControl>
           play();
         },
         child: Icon(
-          Icons.replay,
+          IconFonts.iconPause,
           color: Colors.white,
           size: sizeTransformCallback(40),
         ),
@@ -287,9 +288,9 @@ class _TencentVideoControlState extends State<TencentVideoControl>
           _toggleMask();
         },
         child: Icon(
-          Icons.play_arrow,
+          IconFonts.iconPause,
           color: Colors.white,
-          size: sizeTransformCallback(40),
+          size: sizeTransformCallback(48),
         ),
       );
     } else if (isBuffering) {

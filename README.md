@@ -32,3 +32,12 @@
 [ ] 选集
 [x] 播放出错展示
 [ ] seekTo/设置亮度/音量 触发频繁
+
+# 字体
+```yml
+
+fonts:
+    - family: FFVideoIconFont
+      fonts:
+        - asset: packages/ff_video/fonts/iconfont.ttf
+```

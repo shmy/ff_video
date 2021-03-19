@@ -19,14 +19,11 @@ class _Header extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final double height = sizeTransformCallback(30);
-    final double iconSize = sizeTransformCallback(28);
+    final double iconSize = sizeTransformCallback(24);
     return Transform.translate(
       offset: Offset(0, (animation - 1) * height),
       child: Container(
         height: height,
-        padding: EdgeInsets.symmetric(
-          horizontal: sizeTransformCallback(5),
-        ),
         decoration: BoxDecoration(
           gradient: new LinearGradient(
               begin: Alignment.bottomCenter,
@@ -46,10 +43,13 @@ class _Header extends StatelessWidget {
                   Navigator.of(context).pop();
                 }
               },
-              child: Icon(
-                Icons.arrow_back_ios_outlined,
-                color: Colors.white,
-                size: iconSize,
+              child: Padding(
+                padding:  EdgeInsets.symmetric(horizontal: sizeTransformCallback(5)),
+                child: Icon(
+                  IconFonts.iconCustomBack,
+                  color: Colors.white,
+                  size: iconSize,
+                ),
               ),
             ),
             Expanded(

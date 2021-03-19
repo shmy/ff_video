@@ -11,7 +11,7 @@ class _LockView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final size = sizeTransformCallback(28);
+    final size = sizeTransformCallback(34);
     final dist = size + sizeTransformCallback(5);
     return GestureDetector(
       onTap: () {
@@ -21,7 +21,7 @@ class _LockView extends StatelessWidget {
       child: Transform.translate(
         offset: Offset(animation * dist - size, 0),
         child: Icon(
-          mixin.isLocked ? Icons.lock : Icons.lock_open,
+          mixin.isLocked ? IconFonts.iconSuoding : IconFonts.iconJihuohuoqijiesuo,
           color: Colors.white,
           size: size,
         ),
