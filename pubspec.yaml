@@ -53,7 +53,7 @@ flutter:
   fonts:
     - family: FFVideoIconFont
       fonts:
-        - asset: lib/fonts/iconfont.ttf
+        - asset: lib/font.ttf
   # fonts:
   #   - family: Schyler
   #     fonts:

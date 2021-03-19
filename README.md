@@ -39,5 +39,5 @@
 fonts:
     - family: FFVideoIconFont
       fonts:
-        - asset: packages/ff_video/fonts/iconfont.ttf
+        - asset: packages/ff_video/font.ttf
 ```
